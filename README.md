@@ -5,7 +5,7 @@
 
 <div align="center">
   <h1 style="font-size: 4rem; font-weight: bold; color: #667eea; margin: 20px 0; display: flex; align-items: center; justify-content: center; gap: 20px;">
-    <img src="assets/tsail_rdt.png" alt="TSAIL RDT" style="height: 8rem; width: auto;" />
+    <!-- <img src="assets/tsail_rdt.png" alt="TSAIL RDT" style="height: 8rem; width: auto;" /> -->
     RDT 2
   </h1>
 </div>
