@@ -112,6 +112,8 @@ We provide multiple VLA model checkpoints with capabilities to deploy on various
 
 | Model        | Use Case    | Description                                                                                                 | Checkpoint Path                                |
 | ------------ | ----------- | ----------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| normalizer      | Inference & Fine-Tuning (Freeze) | Normalizer for action normalization   | `🚧 In progress 🚧`    |
+| Residual VQ  | Inference & Fine-Tuning (Freeze) |  Residual VQ as the action tokenizer   | `🚧 In progress 🚧`    |
 | RDT2-VQ      | Inference & Fine-Tuning | Auto-regressive VLA with Residual VQ as the action tokenizer   | `🚧 In progress 🚧`    |
 
 <!-- | $\pi_0$-FAST | Fine-Tuning | Base autoregressive [π₀-FAST model](https://www.physicalintelligence.company/research/fast) for fine-tuning | `gs://openpi-assets/checkpoints/pi0_fast_base` |
@@ -226,7 +228,23 @@ We provide fine-tune the $\pi_{0.5}$ model on the data from BimanualUR5e as a ru
 
 We provide a minimal example script for converting assumed data sturcture to a webdataset dataset in [`examples/libero/convert_libero_data_to_lerobot.py`](examples/libero/convert_libero_data_to_lerobot.py). You can easily modify it to convert your own data! 
 
+Moreover, we provde processed [example data]() collected Bimanual UR5e on huggingface. You can download it and use it directly.
+
 ### 2. Defining training configs and running training
+
+
+Define your dataset config following format in [`configs/datasets/posttrain/example.yaml`](configs/datasets/posttrain/example.yaml)
+```yaml
+# Define your dataset name here
+name: <your_dataset_name> # e.g. bimanual_fold_cloth
+type: single
+shards_dir: <your_shards_dir> # e.g. /ssd/bimanual_fold_cloth/shards 
+kwargs:
+  instruction_path: <your_instruction_path> # e.g. /share/bimanual_fold_cloth/instruction.json
+  normalizer_path: <your_normalizer_path> # e.g. /share/bimanual_fold_cloth/normalizer.pt
+```
+
+For the provided example data, its corresponding config is in [`configs/datasets/posttrain/example.yaml`](configs/datasets/posttrain/bimanual_ur5e.yaml). Remember to replace the `<root_dir>` and `<path_to_normalizer>` with your own path for downloading.
 
 #### RDT2-VQ
 
@@ -236,40 +254,61 @@ Currently, we support the following fine-tuning methods:
 - LoRA (low-rank adaptation) training
 
 Since RDT2-VQ is based on Qwen2.5-VL, you are free to apply using other techniques including (e.g., fsdp, quantization) by following Qwen2.5-VL's fine-tunig practices.
-We provide example fine-tuning scripts for [full-parameter](shell_scripts/train_rdt2_vq.py) and [LoRA](shell_scripts/train_rdt2_vq_lora.py) fine-tuning.
+We provide example fine-tuning scripts for [full-parameter](scripts/finetune_full_param.sh) and [LoRA](scripts/finetune_lora.sh) fine-tuning, which you can directly use to kick off your own training. 
+
+To provide a better understanding, we elaborate the line-by-line explanation of the full-parameter fine-tuning script (`scripts/finetune_full_param.sh`) with our example data:
+
+```bash
+# Define your env settings here 
+# e.g., nccl, network, proxy, etc.
+
+TASK="bimanual-ur5e"  # Define your task name here
+DATASET_CONFIG_PATH="configs/datasets/posttrain/bimanual_ur5e.yaml"  # Define your dataset config path here
+
+export TOKENIZER_ID="Qwen/Qwen2.5-VL-7B-Instruct"
+export VAE_ID="outputs/vqvae_hf"    # TODO: modify to huggingface link
+export MODEL_ID="Qwen/Qwen2.5-VL-7B-Instruct"   # TODO: modify to RDT2-VQ
+export OUTPUT_DIR="outputs/vqvla-sft-${TASK}" # Define your output directory here
+# TODO: add normalizer path
+
+if [ ! -d "$OUTPUT_DIR" ]; then
+    mkdir "$OUTPUT_DIR"
+    echo "Folder '$OUTPUT_DIR' created"
+else
+    echo "Folder '$OUTPUT_DIR' already exists"
+fi
+
+accelerate launch main.py \
+    --deepspeed="scripts/zero1.json" \  # Deepspeed config file, you can modify it to your own using other sharding strategies
+    --tokenizer_name=$TOKENIZER_ID \
+    --vae_name=$VAE_ID \
+    --pretrained_model_name_or_path=$MODEL_ID \
+    --output_dir=$OUTPUT_DIR \
+    --train_batch_size=64 \
+    --eval_batch_size=32 \
+    --max_train_steps=10000 \ # We suggest training less than 5 epochs to avoid overfitting, 
+                              # you should estimate the number of steps for your data and set it accordingly
+    --eval_strategy="no" \
+    --logging_steps=25 \
+    --checkpoints_total_limit=20 \
+    --checkpointing_step=1000 \
+    --lr_scheduler="cosine" \
+    --learning_rate=1e-5 \
+    --mixed_precision="bf16" \
+    --dataloader_num_workers=16 \
+    --gradient_checkpointing \
+    --log_level="info" \
+    --report_to="wandb" \
+    --lr_warmup_steps=500 \
+    --dataset=$DATASET_CONFIG_PATH \
+    --image_corruption \ # We suggest toggle this on for better vision robustness
+    --use_default_collate_fn_for_eval
+```
 
 Although our RVQ demonstrates high generalization among both hand-held gripper data and real robot data. If you want to fine-tune on your own data with our Residual VQ as action tokenzer, 
 we sincerely suggest you to ensure to firstly check the statistics of your data are within the bound of our Residual VQ. And then test the reconstruction error of your data.
 
 **Note:** We provide a [script]() for compute normalization statistics fo action normalization for bound violation check. This can be beneficial if you are fine-tuning to a new task on a robot. 
-
-Now we can kick off training with the following command:
-
-
-```bash
-# Single GPU training:
-uv run scripts/train_pytorch.py <config_name> --exp_name <run_name> --save_interval <interval>
-
-# Example:
-uv run scripts/train_pytorch.py debug --exp_name pytorch_test
-uv run scripts/train_pytorch.py debug --exp_name pytorch_test --resume  # Resume from latest checkpoint
-
-# Multi-GPU training (single node):
-uv run torchrun --standalone --nnodes=1 --nproc_per_node=<num_gpus> scripts/train_pytorch.py <config_name> --exp_name <run_name>
-
-# Example:
-uv run torchrun --standalone --nnodes=1 --nproc_per_node=2 scripts/train_pytorch.py pi0_aloha_sim --exp_name pytorch_ddp_test
-uv run torchrun --standalone --nnodes=1 --nproc_per_node=2 scripts/train_pytorch.py pi0_aloha_sim --exp_name pytorch_ddp_test --resume
-
-# Multi-Node Training:
-uv run torchrun \
-    --nnodes=<num_nodes> \
-    --nproc_per_node=<gpus_per_node> \
-    --node_rank=<rank_of_node> \
-    --master_addr=<master_ip> \
-    --master_port=<port> \
-    scripts/train_pytorch.py <config_name> --exp_name=<run_name> --save_interval <interval>
-```
 
 
 <!-- ### 3. Spinning up a policy server and running inference
