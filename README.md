@@ -112,7 +112,7 @@ We provide multiple VLA model checkpoints with capabilities to deploy on various
 
 | Model        | Use Case    | Description                                                                                                 | Checkpoint Path                                |
 | ------------ | ----------- | ----------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
-| normalizer      | Inference & Fine-Tuning (Freeze) | Normalizer for action normalization   | `🚧 In progress 🚧`    |
+| normalizer      | Inference & Fine-Tuning (Freeze) | Normalizer for action normalization   | [url](http://ml.cs.tsinghua.edu.cn/~lingxuan/rdt2/umi_normalizer_wo_downsample_indentity_rot.pt)    |
 | Residual VQ  | Inference & Fine-Tuning (Freeze) |  Residual VQ as the action tokenizer   | `🚧 In progress 🚧`    |
 | RDT2-VQ      | Inference & Fine-Tuning | Auto-regressive VLA with Residual VQ as the action tokenizer   | `🚧 In progress 🚧`    |
 

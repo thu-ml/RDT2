@@ -8,7 +8,6 @@ export TOKENIZER_ID="Qwen/Qwen2.5-VL-7B-Instruct"
 export VAE_ID="outputs/vqvae_hf"    # TODO: modify to huggingface link
 export MODEL_ID="Qwen/Qwen2.5-VL-7B-Instruct"    # TODO: modify to RDT2-VQ
 export OUTPUT_DIR="./outputs/vqvla-sft-${TASK}-lora"
-# TODO: add normalizer path
 
 if [ ! -d "$OUTPUT_DIR" ]; then
     mkdir "$OUTPUT_DIR"
