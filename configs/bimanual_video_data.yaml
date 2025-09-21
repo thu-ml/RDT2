@@ -1,0 +1,120 @@
+task:
+  name: umi
+  camera_obs_latency: 0.07
+  robot_obs_latency: 0.0001
+  gripper_obs_latency: 0.0001
+  dataset_frequeny: 0
+  obs_down_sample_steps: 1
+  low_dim_obs_horizon: 1
+  img_obs_horizon: 1
+  action_horizon: 24
+  codec: ffv1
+  shape_meta:
+    obs:
+      camera0_rgb:
+        raw_shape:
+        - 3
+        - 480
+        - 480
+        shape:
+        - 3
+        - 384
+        - 384
+        horizon: ${task.img_obs_horizon}
+        latency_steps: 0
+        down_sample_steps: ${task.obs_down_sample_steps}
+        type: rgb
+        camera_type: monocular
+        ignore_by_policy: false
+      robot0_eef_pos:
+        shape:
+        - 3
+        horizon: ${task.low_dim_obs_horizon}
+        latency_steps: 0.0
+        down_sample_steps: ${task.obs_down_sample_steps}
+        type: low_dim
+        ignore_by_policy: false
+      robot0_eef_rot_axis_angle:
+        raw_shape:
+        - 3
+        shape:
+        - 6
+        horizon: ${task.low_dim_obs_horizon}
+        latency_steps: 0.0
+        down_sample_steps: ${task.obs_down_sample_steps}
+        type: low_dim
+        rotation_rep: rotation_6d
+        ignore_by_policy: false
+      robot0_gripper_width:
+        shape:
+        - 1
+        horizon: ${task.low_dim_obs_horizon}
+        latency_steps: 0.0
+        down_sample_steps: ${task.obs_down_sample_steps}
+        type: low_dim
+        ignore_by_policy: false
+      camera1_rgb:
+        raw_shape:
+        - 3
+        - 480
+        - 480
+        shape:
+        - 3
+        - 384
+        - 384
+        horizon: ${task.img_obs_horizon}
+        latency_steps: 0
+        down_sample_steps: ${task.obs_down_sample_steps}
+        type: rgb
+        camera_type: monocular
+        ignore_by_policy: false
+      robot1_eef_pos:
+        shape:
+        - 3
+        horizon: ${task.low_dim_obs_horizon}
+        latency_steps: 0.0
+        down_sample_steps: ${task.obs_down_sample_steps}
+        type: low_dim
+        ignore_by_policy: false
+      robot1_eef_rot_axis_angle:
+        raw_shape:
+        - 3
+        shape:
+        - 6
+        horizon: ${task.low_dim_obs_horizon}
+        latency_steps: 0.0
+        down_sample_steps: ${task.obs_down_sample_steps}
+        type: low_dim
+        rotation_rep: rotation_6d
+        ignore_by_policy: false
+      robot1_gripper_width:
+        shape:
+        - 1
+        horizon: ${task.low_dim_obs_horizon}
+        latency_steps: 0.0
+        down_sample_steps: ${task.obs_down_sample_steps}
+        type: low_dim
+        ignore_by_policy: false
+    action:
+      shape:
+      - 20
+      horizon: ${task.action_horizon}
+      latency_steps: 0
+      down_sample_steps: ${task.obs_down_sample_steps}
+      rotation_rep: rotation_6d
+  task_name: umi
+  pose_repr:
+    obs_pose_repr: relative
+    action_pose_repr: relative
+  dataset:
+    action_padding: false
+    temporally_independent_normalization: false
+    # repeat_frame_prob: 0.0
+    seed: 42
+    val_ratio: 0.00
+    resample_with_timestamp: false 
+    apply_jpeg_compression: true
+  timestamp_transform:
+    window_size: 10  # window size for timestamp transform
+    gamma: 2.0  # slow down rate for timestamp transform
+    gripper_width_delta_threshold: 0.01  # threshold for gripper width delta
