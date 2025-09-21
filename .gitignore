@@ -25,14 +25,4 @@ tests/
 hostfile*.txt
 .deepspeed_env
 .vscode
-g0275*
-g0290*
 
-/*.png
-/*.out
-/test_args.sh
-
-*.png
-*.zip
-
-/google
