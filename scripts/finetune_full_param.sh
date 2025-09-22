@@ -1,8 +1,8 @@
 # Define your env settings here 
 # e.g., nccl, network, proxy, etc.
 
-TASK="bimanual-posttrain-5task"
-DATASET_CONFIG_PATH="configs/datasets/posttrain/posttrain_5task.yaml"
+TASK="bimanual-ur5e-example"
+DATASET_CONFIG_PATH="configs/datasets/example.yaml"
 
 export TOKENIZER_ID="Qwen/Qwen2.5-VL-7B-Instruct"
 export VAE_ID="outputs/vqvae_hf"    # TODO: modify to huggingface link
