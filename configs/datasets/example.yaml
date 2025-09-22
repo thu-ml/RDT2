@@ -1,0 +1,6 @@
+name: bimanual/ur_example
+type: single
+shards_dir: <root_dir>/shards
+kwargs:
+  instruction_path: <root_dir>/instruction.json
+  normalizer_path: <path_to_normalizer> # download from http://ml.cs.tsinghua.edu.cn/~lingxuan/rdt2/umi_normalizer_wo_downsample_indentity_rot.pt

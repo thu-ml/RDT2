@@ -233,15 +233,15 @@ Moreover, we provde processed [example data]() collected Bimanual UR5e on huggin
 ### 2. Defining training configs and running training
 
 
-Define your dataset config following format in [`configs/datasets/posttrain/example.yaml`](configs/datasets/posttrain/example.yaml)
+Define your dataset config following format in [`configs/datasets/example.yaml`](configs/datasets/example.yaml)
 ```yaml
 # Define your dataset name here
-name: <your_dataset_name> # e.g. bimanual_fold_cloth
+name: <your_dataset_name> # e.g. bimanual/ur_example
 type: single
-shards_dir: <your_shards_dir> # e.g. /ssd/bimanual_fold_cloth/shards 
+shards_dir: <your_shards_dir> # e.g. /ssd/rdt2/bimanual_fold_cloth/shards 
 kwargs:
-  instruction_path: <your_instruction_path> # e.g. /share/bimanual_fold_cloth/instruction.json
-  normalizer_path: <your_normalizer_path> # e.g. /share/bimanual_fold_cloth/normalizer.pt
+  instruction_path: <your_instruction_path> # e.g. /ssd/rdt2/ur_example/instruction.json
+  normalizer_path: <your_normalizer_path> # e.g. /ssd/rdt2/umi_normalizer_wo_downsample_indentity_rot.pt
 ```
 
 For the provided example data, its corresponding config is in [`configs/datasets/posttrain/example.yaml`](configs/datasets/posttrain/bimanual_ur5e.yaml). Remember to replace the `<root_dir>` and `<path_to_normalizer>` with your own path for downloading.
