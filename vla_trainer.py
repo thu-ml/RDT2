@@ -247,10 +247,6 @@ class VLATrainer(Trainer):
             "action_mse_error_pos": EvalLoopContainer(args.eval_do_concat_batches, padding_index=-100),
             "action_geodesic_error_rot": EvalLoopContainer(args.eval_do_concat_batches, padding_index=-100),
             "action_mse_error_width": EvalLoopContainer(args.eval_do_concat_batches, padding_index=-100),
-            
-            "v_pred": EvalLoopContainer(args.eval_do_concat_batches, padding_index=-100),
-            "v_targets": EvalLoopContainer(args.eval_do_concat_batches, padding_index=-100),
-            "v_pred_mse_loss": EvalLoopContainer(args.eval_do_concat_batches, padding_index=-100),
         }
 
         metrics = None
