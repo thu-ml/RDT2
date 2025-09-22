@@ -249,7 +249,7 @@ shard-000002.tar
 ...
 ```
 
-Moreover, we provde processed [example data]() collected with Bimanual UR5e on huggingface. You can download it and use it directly.
+Moreover, we provde processed [example data](https://huggingface.co/datasets/robotics-diffusion-transformer/BimanualUR5eExample) collected with Bimanual UR5e on huggingface. You can download it and use it directly.
 
 ### 2. Defining training configs and running training
 
@@ -264,7 +264,7 @@ kwargs:
   normalizer_path: <your_normalizer_path> # e.g. /ssd/rdt2/umi_normalizer_wo_downsample_indentity_rot.pt
 ```
 
-For the provided example data, its corresponding config is in [`configs/datasets/posttrain/example.yaml`](configs/datasets/posttrain/bimanual_ur5e.yaml). Remember to replace the `<root_dir>` and `<path_to_normalizer>` with your own path for downloading.
+For the provided example data, its corresponding config is in [`configs/datasets/example.yaml`](configs/datasets/example.yaml). Remember to replace the `<root_dir>` and `<path_to_normalizer>` with your own path for downloading.
 
 ### 3. Run training
 
