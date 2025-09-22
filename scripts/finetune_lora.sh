@@ -5,8 +5,8 @@ TASK="bimanual-ur5e-example" # Define your task name here
 DATASET_CONFIG_PATH="configs/datasets/example.yaml"   # Define your dataset config path here
 
 export TOKENIZER_ID="Qwen/Qwen2.5-VL-7B-Instruct"
-export VAE_ID="outputs/vqvae_hf"    # TODO: modify to huggingface link
-export MODEL_ID="Qwen/Qwen2.5-VL-7B-Instruct"    # TODO: modify to RDT2-VQ
+export VAE_ID="robotics-diffusion-transformer/RVQActionTokenizer"
+export MODEL_ID="robotics-diffusion-transformer/RDT2-VQ"
 export OUTPUT_DIR="./outputs/vqvla-sft-${TASK}-lora"
 
 if [ ! -d "$OUTPUT_DIR" ]; then

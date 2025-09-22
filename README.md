@@ -45,11 +45,11 @@
 
 RDT2, the sequel to [RDT-1B](https://rdt-robotics.github.io/rdt-robotics/), is the first foundation model that can achieve **zero-shot deployment** on **unseen embodiments** for **simple open-vocabulary** tasks like picking, placing, shaking, wiping, etc. This milestone was made possible by multifaceted efforts:
 
-- We redesigned the [UMI hardware]() by applying higher-strength materials and more precise tracking methods, ensuring its reliability for large-scale data collection.
+- We redesigned the [UMI hardware](link) by applying higher-strength materials and more precise tracking methods, ensuring its reliability for large-scale data collection.
 - We collected **10,000+ hours** of human manipulation videos in **100+ different indoor scenes**, covering the majority of household tasks that a gripper can do.
 
 Currently, this repo contains models:
-- the [RDT2-VQ](link), an auto vision-language-action model (VLA) which employs [Residual VQ](https://arxiv.org/abs/2107.03312) as the action tokenizer, is adapted from [Qwen2.5-VL-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct) with our UMI dataset, enabling superior zero-shot instruction-following capability.
+- the [RDT2-VQ](https://huggingface.co/robotics-diffusion-transformer/RDT2-VQ), an auto vision-language-action model (VLA) which employs [Residual VQ](https://arxiv.org/abs/2107.03312) as the action tokenizer, is adapted from [Qwen2.5-VL-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct) with our UMI dataset, enabling superior zero-shot instruction-following capability.
 
 For all models, we provide checkpoints and examples for using them out of the box or fine-tuning them to your own datasets. Currently, we have verified the efficay of our models on platforms including [Bimanual UR5e](https://www.universal-robots.com/products/ur5e/) and [Bimanual Franka Research 3](https://franka.de/franka-research-3), and we are optimistic will able to deploy them successfully on more platforms in the future by following our [guidelines](#running-inference-for-a-pre-trained-model).
 
@@ -91,6 +91,7 @@ pip install torch==2.7.1 torchvision==0.22.1 --index-url https://download.pytorc
 # install flash 
 pip install flash-attn --no-build-isolation
 
+# TODO: to be verified
 # install other dependencies
 pip install -r requirements.txt
 
@@ -112,9 +113,9 @@ We provide multiple VLA model checkpoints with capabilities to deploy on various
 
 | Model        | Use Case    | Description                                                                                                 | Checkpoint Path                                |
 | ------------ | ----------- | ----------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
-| normalizer      | Inference & Fine-Tuning (Freeze) | Normalizer for action normalization   | [url](http://ml.cs.tsinghua.edu.cn/~lingxuan/rdt2/umi_normalizer_wo_downsample_indentity_rot.pt)    |
-| Residual VQ  | Inference & Fine-Tuning (Freeze) |  Residual VQ as the action tokenizer   | `🚧 In progress 🚧`    |
-| RDT2-VQ      | Inference & Fine-Tuning | Auto-regressive VLA with Residual VQ as the action tokenizer   | `🚧 In progress 🚧`    |
+| normalizer      | Inference & Fine-Tuning (Freeze) | Normalizer for action normalization   | [umi_normalizer_wo_downsample_indentity_rot.pt](http://ml.cs.tsinghua.edu.cn/~lingxuan/rdt2/umi_normalizer_wo_downsample_indentity_rot.pt)    |
+| Residual VQ  | Inference & Fine-Tuning (Freeze) |  Residual VQ (RVQ) as the action tokenizer   | [`robotics-diffusion-transformer/RVQActionTokenizer`](https://huggingface.co/robotics-diffusion-transformer/RVQActionTokenizer)    |
+| RDT2-VQ      | Inference & Fine-Tuning | Auto-regressive VLA with Residual VQ as the action tokenizer   | [`robotics-diffusion-transformer/RDT2-VQ`](https://huggingface.co/robotics-diffusion-transformer/RDT2-VQ)    |
 
 <!-- | $\pi_0$-FAST | Fine-Tuning | Base autoregressive [π₀-FAST model](https://www.physicalintelligence.company/research/fast) for fine-tuning | `gs://openpi-assets/checkpoints/pi0_fast_base` |
 | $\pi_{0.5}$    | Fine-Tuning | Base [π₀.₅ model](https://www.physicalintelligence.company/blog/pi05) for fine-tuning    | `gs://openpi-assets/checkpoints/pi05_base`      | -->
@@ -155,18 +156,19 @@ device = "cuda:0"
 
 processor = AutoProcessor.from_pretrained("Qwen/Qwen2.5-VL-7B-Instruct")
 model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
-    "link"
+    "robotics-diffusion-transformer/RDT2-VQ"
     torch_dtype=torch.bfloat16,
     attn_implementation="flash_attention_2",
     device_map=device
 ).eval()
-vae = MultiVQVAE.from_pretrained("link").eval()
+vae = MultiVQVAE.from_pretrained("robotics-diffusion-transformer/RVQActionTokenizer").eval()
 vae = vae.to(device=device, dtype=torch.float32)
 
 valid_action_id_length = (
     vae.pos_id_len + vae.rot_id_len + vae.grip_id_len
 )
-normalizer = LinearNormalizer.from_pretrained("link")
+# TODO: modify to your own downloaded normalizer path
+normalizer = LinearNormalizer.from_pretrained("umi_normalizer_wo_downsample_indentity_rot.pt")  # 
 
 result = batch_predict_action(
     model,
@@ -220,7 +222,7 @@ We provide detailed step-by-step examples for running inference of our pre-train
 
 ## Fine-Tuning Models on Your Own Data
 
-We will fine-tune the RDT 2 models on the [example dataset from Bimanual UR5e]() as a running example for how to fine-tune a base model on your own data. We will explain three steps:
+We will fine-tune the RDT 2 models on the [example dataset from Bimanual UR5e](https://huggingface.co/datasets/robotics-diffusion-transformer/BimanualUR5eExample) as a running example for how to fine-tune a base model on your own data. We will explain three steps:
 1. Convert your data to a [webdataset](https://github.com/webdataset/webdataset) shards (which we use for training for high-efficent IO)
 2. Define training configs
 3. Run training
@@ -285,8 +287,8 @@ TASK="bimanual-ur5e-example"  # Define your task name here
 DATASET_CONFIG_PATH="configs/datasets/example.yaml"  # Define your dataset config path here
 
 export TOKENIZER_ID="Qwen/Qwen2.5-VL-7B-Instruct"
-export VAE_ID="outputs/vqvae_hf"    # TODO: modify to huggingface link
-export MODEL_ID="Qwen/Qwen2.5-VL-7B-Instruct"   # TODO: modify to RDT2-VQ
+export VAE_ID="robotics-diffusion-transformer/RVQActionTokenizer"    # TODO: modify to huggingface link
+export MODEL_ID="robotics-diffusion-transformer/RDT2-VQ"   # TODO: modify to RDT2-VQ
 export OUTPUT_DIR="outputs/vqvla-sft-${TASK}" # Define your output directory here
 # TODO: add normalizer path
 
@@ -354,11 +356,11 @@ Different models have their specific precision settings:
 
 Since the size of Residual VQ is very small, we use `float32` for both training and inference.
 
-**RDT VLM ([RDT2-VQ]()):**
+**RDT VLM ([RDT2-VQ](https://huggingface.co/robotics-diffusion-transformer/RDT2-VQ)):**
 
 Uses full `bfloat16` (default) following Qwen2.5-VL. You can follow the practice for [Qwen2.5-VL](https://github.com/QwenLM/Qwen2.5-VL) to adjust the precision by applying techniques like mixed precision or quantization.
 
-**RDT Action Expert ([RDT2-FM]() \& [RDT-FM-UltraFast]()):**
+**RDT Action Expert ([RDT2-FM](link) \& [RDT-FM-UltraFast](link)):**
 
 Uses full `bfloat16` for both training and inference. 
 
