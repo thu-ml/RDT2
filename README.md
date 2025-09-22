@@ -141,7 +141,7 @@ We provide multiple VLA model checkpoints with capabilities to deploy on various
 
 ### 2. Run Inference
 
-Our pre-trained model checkpoints can be run with a few lines of code (here our [RDT2-VQ model]()):
+Our pre-trained model checkpoints can be run with a few lines of code (here our [RDT2-VQ model](https://huggingface.co/robotics-diffusion-transformer/RDT2-VQ)):
 ```python
 import torch
 from transformers import AutoProcessor, Qwen2_5_VLForConditionalGeneration
@@ -168,6 +168,7 @@ valid_action_id_length = (
     vae.pos_id_len + vae.rot_id_len + vae.grip_id_len
 )
 # TODO: modify to your own downloaded normalizer path
+# download from http://ml.cs.tsinghua.edu.cn/~lingxuan/rdt2/umi_normalizer_wo_downsample_indentity_rot.pt
 normalizer = LinearNormalizer.from_pretrained("umi_normalizer_wo_downsample_indentity_rot.pt")  # 
 
 result = batch_predict_action(
