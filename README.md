@@ -13,7 +13,7 @@
 <div align="center" style="line-height: 1;">
   <a href="https://rdt-robotics.github.io/rdt-robotics/"><img alt="Homepage"
     src="https://img.shields.io/badge/RDT%202-Homepage-4287f5?logo=homepage&logoColor=#009BD5"/></a>
-  <a href="https://huggingface.co/thu-ml"><img alt="Hugging Face"
+  <a href="https://huggingface.co/robotics-diffusion-transformer"><img alt="Hugging Face"
     src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-TSAIL-ffc107?color=ffc107&logoColor=white"/></a>
   <br>
   <a href="https://discord.gg/vsZS3zmf9A"><img alt="Discord"
