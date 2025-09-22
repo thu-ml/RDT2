@@ -51,7 +51,7 @@ RDT2, the sequel to [RDT-1B](https://rdt-robotics.github.io/rdt-robotics/), is t
 Currently, this repo contains models:
 - the [RDT2-VQ](link), an auto vision-language-action model (VLA) which employs [Residual VQ](https://arxiv.org/abs/2107.03312) as the action tokenizer, is adapted from [Qwen2.5-VL-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct) with our UMI dataset, enabling superior zero-shot instruction-following capability.
 
-For all models, we provide checkpoints and examples for using them out of the box or fine-tuning them to your own datasets. Currently, we have verified the efficay of our models on platforms including [Bimanual UR5e]() and [Bimanual Franka Research 3](), and we are optimistic will able to deploy them successfully on more platforms in the future by following our [guidelines]().
+For all models, we provide checkpoints and examples for using them out of the box or fine-tuning them to your own datasets. Currently, we have verified the efficay of our models on platforms including [Bimanual UR5e](https://www.universal-robots.com/products/ur5e/) and [Bimanual Franka Research 3](https://franka.de/franka-research-3), and we are optimistic will able to deploy them successfully on more platforms in the future by following our [guidelines](#running-inference-for-a-pre-trained-model).
 
 
 ## Updates
@@ -68,7 +68,7 @@ To run the models in this repository, you will need an NVIDIA GPU with at least 
 | Fine-Tuning (LoRA) |   -     | > 32 GB | A100 (40GB)           |
 | Fine-Tuning (Full) |   -    |  > 80 GB  | A100 (80GB) / H100 / B200|
 
-As for zero-shot deployment, you need to purchase the designated _end effector_ and _camera_, and 3D print the corresponding _camera stand_ and _flange_ according to [Harware installation and Calibration]().
+As for zero-shot deployment, you need to purchase the designated _end effector_ and _camera_, and 3D print the corresponding _camera stand_ and _flange_ according to [Harware Set up and Calibration](#1-important-hard-ware-set-up-and-calibration).
 
 The repo has been tested with Ubuntu 24.04, we do not currently support other operating systems.
 
@@ -275,14 +275,14 @@ Currently, we support the following fine-tuning methods:
 Since RDT2-VQ is based on Qwen2.5-VL, you are free to apply using other techniques including (e.g., fsdp, quantization) by following Qwen2.5-VL's fine-tunig practices.
 We provide example fine-tuning scripts for [full-parameter](scripts/finetune_full_param.sh) and [LoRA](scripts/finetune_lora.sh) fine-tuning, which you can directly use to kick off your own training. 
 
-To provide a better understanding, we elaborate the line-by-line explanation of the full-parameter fine-tuning script (`scripts/finetune_full_param.sh`) with our example data:
+To provide a better understanding, we elaborate the line-by-line explanation of the full-parameter fine-tuning script ([`scripts/finetune_full_param.sh`](scripts/finetune_full_param.sh)) with our example data:
 
 ```bash
 # Define your env settings here 
 # e.g., nccl, network, proxy, etc.
 
-TASK="bimanual-ur5e"  # Define your task name here
-DATASET_CONFIG_PATH="configs/datasets/posttrain/bimanual_ur5e.yaml"  # Define your dataset config path here
+TASK="bimanual-ur5e-example"  # Define your task name here
+DATASET_CONFIG_PATH="configs/datasets/example.yaml"  # Define your dataset config path here
 
 export TOKENIZER_ID="Qwen/Qwen2.5-VL-7B-Instruct"
 export VAE_ID="outputs/vqvae_hf"    # TODO: modify to huggingface link
