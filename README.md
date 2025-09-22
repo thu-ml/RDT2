@@ -220,18 +220,35 @@ We provide detailed step-by-step examples for running inference of our pre-train
 
 ## Fine-Tuning Models on Your Own Data
 
-We provide fine-tune the $\pi_{0.5}$ model on the data from BimanualUR5e as a running example for how to fine-tune a base model on your own data. We will explain three steps:
-1. Convert your data to a [webdataset]() shards (which we use for training for high-efficent IO)
-2. Defining training configs and running training
+We will fine-tune the RDT 2 models on the [example dataset from Bimanual UR5e]() as a running example for how to fine-tune a base model on your own data. We will explain three steps:
+1. Convert your data to a [webdataset](https://github.com/webdataset/webdataset) shards (which we use for training for high-efficent IO)
+2. Define training configs
+3. Run training
 
 ### 1. Convert your data to a LeRobot dataset
 
-We provide a minimal example script for converting assumed data sturcture to a webdataset dataset in [`examples/libero/convert_libero_data_to_lerobot.py`](examples/libero/convert_libero_data_to_lerobot.py). You can easily modify it to convert your own data! 
+We provide example scripts for converting assumed data sturcture to a webdataset dataset in [`data/preprocess/robot`](data/preprocess/robot) with detailed [guidelines](data/preprocess/robot/README.md). You can easily modify it to convert your own data! 
 
-Moreover, we provde processed [example data]() collected Bimanual UR5e on huggingface. You can download it and use it directly.
+Concretely, the sturcture of processed webdatset shard is like this:
+```bash 
+shard-000000.tar
+├── 0.image.jpg   # Binocular (left wrist camera + right wrist camera) RGB image in np.ndarray of shape (384, 768, 3) with dtype=np.uint8
+├── 0.action.npy  # Relative action chunk in np.ndarray of shape (24, 20) with dtype=np.float32
+├── 0.action_token.npy # Corresponding action token in np.ndarray of shape (27,) ranging from 0 to 1024 with dtype=np.int16
+├── 0.meta.json # Meta data including key `sub_task_instruction_key` to index the corresponding instruction from `instructions.json`
+├── 1.image.jpg
+├── 1.action.npy
+├── 1.action_token.npy
+├── 1.meta.json
+├── ...
+shard-000001.tar
+shard-000002.tar
+...
+```
+
+Moreover, we provde processed [example data]() collected with Bimanual UR5e on huggingface. You can download it and use it directly.
 
 ### 2. Defining training configs and running training
-
 
 Define your dataset config following format in [`configs/datasets/example.yaml`](configs/datasets/example.yaml)
 ```yaml
@@ -245,6 +262,8 @@ kwargs:
 ```
 
 For the provided example data, its corresponding config is in [`configs/datasets/posttrain/example.yaml`](configs/datasets/posttrain/bimanual_ur5e.yaml). Remember to replace the `<root_dir>` and `<path_to_normalizer>` with your own path for downloading.
+
+### 3. Run training
 
 #### RDT2-VQ
 
