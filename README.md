@@ -11,8 +11,8 @@
 </div>
 <!-- <hr> -->
 <div align="center" style="line-height: 1;">
-  <a href="https://rdt-robotics.github.io/rdt-robotics/"><img alt="Homepage"
-    src="https://img.shields.io/badge/RDT%202-Homepage-4287f5?logo=homepage&logoColor=#009BD5"/></a>
+  <a href="https://rdt-robotics.github.io/rdt2/"><img alt="Homepage"
+    src="https://img.shields.io/badge/RDT%202-Homepage-4287f5?logo=probot&logoColor=#009BD5"/></a>
   <a href="https://huggingface.co/robotics-diffusion-transformer"><img alt="Hugging Face"
     src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-TSAIL%20RDT-ffc107?color=ffc107&logoColor=white"/></a>
   <br>
@@ -22,13 +22,13 @@
     src="https://img.shields.io/badge/WeChat-RDT-brightgreen?logo=wechat&logoColor=white"/></a>
   <!-- <a href="https://twitter.com/deepseek_ai"><img alt="Twitter Follow"
     src="https://img.shields.io/badge/Twitter-deepseek_ai-white?logo=x&logoColor=white"/></a> -->
+  <!-- <br> -->
+  <a href="LICENSE"><img alt="License"
+    src="https://img.shields.io/badge/License-Apache--2.0-f5de53?logo=apache&color=f5de53"/></a>
+  <!-- <a href="https://github.com/deepseek-ai/DeepSeek-V3/blob/main/LICENSE-MODEL"><img alt="Model License"
+    src="https://img.shields.io/badge/Model_License-Model_Agreement-f5de53?&color=f5de53"/></a> -->
   <br>
-  <a href="https://github.com/deepseek-ai/DeepSeek-V3/blob/main/LICENSE-CODE"><img alt="Code License"
-    src="https://img.shields.io/badge/Code_License-MIT-f5de53?&color=f5de53"/></a>
-  <a href="https://github.com/deepseek-ai/DeepSeek-V3/blob/main/LICENSE-MODEL"><img alt="Model License"
-    src="https://img.shields.io/badge/Model_License-Model_Agreement-f5de53?&color=f5de53"/></a>
-  <br>
-  <a href="https://arxiv.org/pdf/2412.19437"><b>Blog Link</b>👁️</a> 
+  <!-- <a href="https://arxiv.org/pdf/2412.19437"><b>Blog Link</b>👁️</a>  -->
   <!-- <a href="https://arxiv.org/pdf/2412.19437"><b>Paper Link</b>📄</a> -->
 </div>
 
@@ -56,7 +56,7 @@ For all models, we provide checkpoints and examples for using them out of the bo
 
 ## Updates
 
-- [Sept 2025] We released RDT2-VQ, the sequel of RDT-1B with better open-world generalization and zero-shot deployment on unseen embodiments.
+- [Sept 2025] We released [RDT2-VQ](https://huggingface.co/robotics-diffusion-transformer/RDT2-VQ), the sequel of RDT-1B with better open-world generalization and zero-shot deployment on unseen embodiments.
 
 ## Requirements
 
