@@ -228,11 +228,11 @@ We will fine-tune the RDT 2 models on the [example dataset from Bimanual UR5e](h
 2. Define training configs
 3. Run training
 
-### 1. Convert your data to a LeRobot dataset
+### 1. Convert your data to WebDataset shards
 
 We provide example scripts for converting assumed data sturcture to a webdataset dataset in [`data/preprocess/robot`](data/preprocess/robot) with detailed [guidelines](data/preprocess/robot/README.md). You can easily modify it to convert your own data! 
 
-Concretely, the sturcture of processed webdatset shard is like this:
+Concretely, the sturcture of processed webdatset shardsis like this:
 ```bash 
 shard-000000.tar
 ├── 0.image.jpg   # Binocular (left wrist camera + right wrist camera) RGB image in np.ndarray of shape (384, 768, 3) with dtype=np.uint8
