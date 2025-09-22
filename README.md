@@ -202,7 +202,7 @@ action_chunk = result["action_pred"][0] # torch.FloatTensor of shape (24, 20) wi
 #   T=24: our action_chunk predicts the future 0.8s in fps=30, i.e. 24 frames
 #   D=20: following the setting of UMI, we predict the action for both arms from right to left
 #   - [0-2]: RIGHT ARM end effector position in x, y, z (unit: m)
-#   - [3-8]: RIGHT ARMe nd effector rotation in 6D rotation representation
+#   - [3-8]: RIGHT ARM end effector rotation in 6D rotation representation
 #   - [9]: RIGHT ARM gripper width (unit: m)
 #   - [10-12]: LEFT ARM end effector position in x, y, z (unit: m)
 #   - [13-18]: LEFT ARM end effector rotation in 6D rotation representation
