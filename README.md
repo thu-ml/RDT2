@@ -361,7 +361,7 @@ Since the size of Residual VQ is very small, we use `float32` for both training 
 
 Uses full `bfloat16` (default) following Qwen2.5-VL. You can follow the practice for [Qwen2.5-VL](https://github.com/QwenLM/Qwen2.5-VL) to adjust the precision by applying techniques like mixed precision or quantization.
 
-**RDT Action Expert ([RDT2-FM](link) \& [RDT-FM-UltraFast](link)):**
+**RDT Action Expert ([RDT2-FM](link) \& [RDT2-FM-UltraFast](link)):**
 
 Uses full `bfloat16` for both training and inference. 
 
