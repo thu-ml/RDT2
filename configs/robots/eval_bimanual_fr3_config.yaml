@@ -1,0 +1,80 @@
+{
+  "cameras": [
+    {
+      "serial": "DA6135139",
+      "fps": 30,
+      "put_desired_frequency": 30,
+      # "input_res": [480, 480],
+      # "output_res": [384, 384],
+    },
+    {
+      "serial": "DA6135080",
+      "fps": 30,
+      "put_desired_frequency": 30,
+      # "input_res": [480, 480],
+      # "output_res": [384, 384],
+    }
+  ],
+  # robot configurations, 0->right 1->left
+  # comment out robot #1 if only using 1 arm
+  "robots": [
+    {
+      "robot_type": "franka",
+      "robot_ip": "127.0.0.1",
+      "robot_port": 4242,
+      "robot_obs_latency": 0.0001, "robot_action_latency": 0.167,   
+        # table height for finger-table collision avoidance
+      # -inf to disable
+      "height_threshold": -0.1, 
+      # sphere collision primitive size and location for inter-gripper collision avoidance
+      # 0 to disable
+      "sphere_radius": 0.1, "sphere_center": [0, -0.06, -0.185],
+    },
+    {
+      "robot_type": "franka",
+      "robot_ip": "127.0.0.1",
+      "robot_port": 4243,
+      "robot_obs_latency": 0.0001, "robot_action_latency": 0.167,   
+        # table height for finger-table collision avoidance
+      # -inf to disable
+      "height_threshold": -0.1, 
+      # sphere collision primitive size and location for inter-gripper collision avoidance
+      # 0 to disable
+      "sphere_radius": 0.1, "sphere_center": [0, -0.06, -0.185],
+      # "name": "left_franka",
+      # "zerorpc_port": 4243,
+      # "fps": 300, 
+      # "put_desired_frequency": 300,
+    }
+  ],
+  # gripper configurations, 0->right 1->left
+   "grippers": [
+    {
+      "gripper_type": "zhixing",
+      "serial": "4294935675",
+      "gripper_obs_latency": 0.0157, "gripper_action_latency": 0.167,
+      "force": 30,
+      "open_width": 0.12, "closed_width": 0.0, "finger_thickness": 0.023
+    },
+    {
+      "gripper_type": "zhixing",
+      "serial": "4294933380",
+      "gripper_obs_latency": 0.0157, "gripper_action_latency": 0.167,
+      "force": 30,
+      "open_width": 0.12, "closed_width": 0.0, "finger_thickness": 0.023
+    }
+  ],
+  # FIXME: transformation right arm's base frame in left arm's base coordinate frame
+  "tx_left_right": [
+    [ 1.        ,  0.        ,  0.        ,  0.01      ],
+    [ 0.        ,  1.        ,  0.        , -0.927     ],
+    [ 0.        ,  0.        ,  1.        , -0.01     ],
+    [ 0.        ,  0.        ,  0.        ,  1.        ]
+  ],
+  "tx_tracker_to_tcp": [
+    [ 1.        ,  0.        ,  0.        ,  0.        ],
+    [ 0.        ,  1.        ,  0.        ,  0.062553  ],
+    [ 0.        ,  0.        ,  1.        ,  -0.026733  ],
+    [ 0.        ,  0.        ,  0.        ,  1.        ]
+  ]
+}
