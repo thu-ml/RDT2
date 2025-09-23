@@ -45,7 +45,7 @@
 
 RDT2, the sequel to [RDT-1B](https://rdt-robotics.github.io/rdt-robotics/), is the first foundation model that can achieve **zero-shot deployment** on **unseen embodiments** for **simple open-vocabulary** tasks like picking, placing, shaking, wiping, etc. This milestone was made possible by multifaceted efforts:
 
-- We redesigned the [UMI hardware](link) by applying higher-strength materials and more precise tracking methods, ensuring its reliability for large-scale data collection.
+- We redesigned the [UMI hardware](https://umi-gripper.github.io) by applying higher-strength materials and more precise tracking methods, ensuring its reliability for large-scale data collection.
 - We collected **10,000+ hours** of human manipulation videos in **100+ different indoor scenes**, covering the majority of household tasks that a gripper can do.
 
 Currently, this repo contains models:
