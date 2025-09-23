@@ -3,17 +3,14 @@ import time
 import enum
 import multiprocessing as mp
 from multiprocessing.managers import SharedMemoryManager
-import scipy.interpolate as si
-import scipy.spatial.transform as st
 import numpy as np
+import zerorpc
 
 from deploy.umi.shared_memory.shared_memory_queue import (
     SharedMemoryQueue, Empty)
 from deploy.umi.shared_memory.shared_memory_ring_buffer import SharedMemoryRingBuffer
 from deploy.umi.common.pose_trajectory_interpolator import PoseTrajectoryInterpolator
 from deploy.umi.common.precise_sleep import precise_wait
-from data.umi.pose_util import pose_to_mat, mat_to_pose
-import zerorpc
 
 class Command(enum.Enum):
     STOP = 0

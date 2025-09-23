@@ -1,29 +1,27 @@
-from typing import Optional, List
-import pathlib
-import numpy as np
-import time
-import shutil
 import math
+import pathlib
+import shutil
+import time
 from multiprocessing.managers import SharedMemoryManager
-from deploy.umi.real_world.rtde_interpolation_controller import RTDEInterpolationController
-from deploy.umi.real_world.wsg_controller import WSGController
-from deploy.umi.real_world.robotiq_controller import RobotiqController
-from deploy.umi.real_world.zhixing_controller import ZhixingController
-# from deploy.umi.real_world.multi_uvc_camera import MultiUvcCamera, VideoRecorder
-from deploy.umi.real_world.franka_interpolation_controller import FrankaInterpolationController
+from typing import List, Optional
+
+import numpy as np
+
+from data.umi.common.cv2_util import get_image_transform, optimal_row_cols
+from data.umi.common.replay_buffer import ReplayBuffer
+# from deploy.umi.common.usb_util import reset_all_elgato_devices, get_sorted_v4l_paths
+from deploy.umi.common.interpolation_util import PoseInterpolator, get_interp1d
+from deploy.umi.common.timestamp_accumulator import (
+    ObsAccumulator, TimestampActionAccumulator)
 from deploy.umi.real_world.camera.multi_mvs_cam import MultiMVSCamera
 from deploy.umi.real_world.camera.mvs_cam import MVSCamControllerConfig
-from deploy.umi.common.timestamp_accumulator import (
-    TimestampActionAccumulator,
-    ObsAccumulator
-)
-# from deploy.umi.common.cv_util import draw_predefined_mask
-# from deploy.umi.real_world.multi_camera_visualizer import MultiCameraVisualizer
-from data.umi.common.replay_buffer import ReplayBuffer
-from data.umi.common.cv2_util import (
-    get_image_transform, optimal_row_cols)
-# from deploy.umi.common.usb_util import reset_all_elgato_devices, get_sorted_v4l_paths
-from deploy.umi.common.interpolation_util import get_interp1d, PoseInterpolator
+from deploy.umi.real_world.franka_interpolation_controller import \
+    FrankaInterpolationController
+# from deploy.umi.real_world.robotiq_controller import RobotiqController
+from deploy.umi.real_world.rtde_interpolation_controller import \
+    RTDEInterpolationController
+# from deploy.umi.real_world.wsg_controller import WSGController
+from deploy.umi.real_world.zhixing_controller import ZhixingController
 
 
 class BimanualUmiEnv:
@@ -118,7 +116,7 @@ class BimanualUmiEnv:
 
         assert len(robots_config) == len(grippers_config)
         robots: List[RTDEInterpolationController] = list()
-        grippers: List[RobotiqController] = list()
+        grippers = list()
         for robot_id, rc in enumerate(robots_config):
             if rc['robot_type'].startswith('ur5'):
                 assert rc['robot_type'] in ['ur5', 'ur5e']
@@ -157,24 +155,24 @@ class BimanualUmiEnv:
         print("[DBG] Robots created.")
 
         for gc in grippers_config:
-            if gc['gripper_type'] == 'wsg50':
-                this_gripper = WSGController(
-                    shm_manager=shm_manager,
-                    hostname=gc['gripper_ip'],
-                    port=gc['gripper_port'],
-                    receive_latency=gc['gripper_obs_latency'],
-                    use_meters=True
-                )
-            elif gc['gripper_type'] == 'robotiq_2f':
-                this_gripper = RobotiqController(
-                    shm_manager=shm_manager,
-                    hostname=gc['gripper_ip'],
-                    port=gc['gripper_port'],
-                    receive_latency=gc['gripper_obs_latency'],
-                    open_width=gc['open_width'],
-                    closed_width=gc['closed_width'],
-                )
-            elif gc['gripper_type'] == 'zhixing':
+            # if gc['gripper_type'] == 'wsg50':
+            #     this_gripper = WSGController(
+            #         shm_manager=shm_manager,
+            #         hostname=gc['gripper_ip'],
+            #         port=gc['gripper_port'],
+            #         receive_latency=gc['gripper_obs_latency'],
+            #         use_meters=True
+            #     )
+            # elif gc['gripper_type'] == 'robotiq_2f':
+            #     this_gripper = RobotiqController(
+            #         shm_manager=shm_manager,
+            #         hostname=gc['gripper_ip'],
+            #         port=gc['gripper_port'],
+            #         receive_latency=gc['gripper_obs_latency'],
+            #         open_width=gc['open_width'],
+            #         closed_width=gc['closed_width'],
+            #     )
+            if gc['gripper_type'] == 'zhixing':
                 this_gripper = ZhixingController(
                     shm_manager=shm_manager,
                     serial=gc['serial'],
