@@ -159,7 +159,7 @@ We provide multiple VLA model checkpoints with capabilities to deploy on various
   - In Installation > Payload  
     - Set mass to 0.82 kg  
     - Set Inertia Matrix to  
-      ```
+      ```python
       [0.001, 0, 0,
        0, 0.001, 0,
        0, 0, 0.001]
@@ -171,7 +171,7 @@ We provide multiple VLA model checkpoints with capabilities to deploy on various
   - On the Franka interface website  
     - Set gripper mass to 1.9 kg  
     - Set Inertia Tensor to  
-      ```
+      ```python
       [0.001, 0, 0,
        0, 0.001, 0,
        0, 0, 0.001]
@@ -390,7 +390,7 @@ we sincerely suggest you firstly to check the statistics of your data are within
 
 #### RDT2-FM
 
-Currently, we support the following fine-tuning RDT Flow-Matching Action Expert with DeepSpeed:We provide example fine-tuning scripts for [full-parameter action expert](scripts/finetune_rdt.sh) fine-tuning. After specifying your own [dataset config path](scripts/finetune_rdt.sh) and replacing the `<repository-path>` in [full-parameter action expert](scripts/finetune_rdt.sh) with your own repository path, you can directly run this script to kick off training. 
+Currently, we support fine-tuning RDT-FM's Action Expert with DeepSpeed: We provide example fine-tuning scripts for [full-parameter action expert](scripts/finetune_rdt.sh) fine-tuning. After specifying your own [dataset config path](scripts/finetune_rdt.sh#L20) and replacing the `<repository-path>` in [full-parameter action expert](scripts/finetune_rdt.sh#L42) with your own repository path, you can directly run this script to kick off training. 
 
 ### Precision Settings
 
