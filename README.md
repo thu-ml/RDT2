@@ -164,7 +164,8 @@ We provide multiple VLA model checkpoints with capabilities to deploy on various
        0, 0.001, 0,
        0, 0, 0.001]
       ```
-
+    - Set speed to 30%
+  
 - 2.2 Set up Franka FR3  
   - Obtain IP address and update [configs/robots/eval_bimanual_fr3_config.yaml](configs/robots/eval_bimanual_fr3_config.yaml)/robots/robot_ip.  
   - On the Franka interface website  
