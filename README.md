@@ -104,6 +104,9 @@ pip install flash-attn --no-build-isolation
 # install other dependencies
 pip install -r requirements.txt
 
+# upgrade nvidia-nccl-cu12
+pip install --upgrade --force-reinstall nvidia-nccl-cu12==2.27.5
+
 # Double check that you have the right transformers 4.51.3 installed
 pip list | grep transformers
 
