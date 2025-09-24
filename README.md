@@ -40,14 +40,14 @@
 - [Installation](#installation)
 - [Model Checkpoints](#model-checkpoints)
 - [Running Inference for a Pre-Trained Model](#running-inference-for-a-pre-trained-model)
-  - [1. \[IMPORTANT\] Hard-ware Set up and Calibration](#1-important-hard-ware-set-up-and-calibration)
-  - [2. Run Inference](#2-run-inference)
+  <!-- - [1. \[IMPORTANT\] Hard-ware Set up and Calibration](#1-important-hard-ware-set-up-and-calibration)
+  - [2. Run Inference](#2-run-inference) -->
 - [Fine-Tuning Models on Your Own Data](#fine-tuning-models-on-your-own-data)
-  - [1. Convert your data to WebDataset shards](#1-convert-your-data-to-webdataset-shards)
+  <!-- - [1. Convert your data to WebDataset shards](#1-convert-your-data-to-webdataset-shards)
   - [2. Defining training configs and running training](#2-defining-training-configs-and-running-training)
   - [3. Run training](#3-run-training)
     - [RDT2-VQ](#rdt2-vq)
-  - [Precision Settings](#precision-settings)
+  - [Precision Settings](#precision-settings) -->
 - [Troubleshooting](#troubleshooting)
 
 ## Overview
@@ -100,7 +100,6 @@ pip install torch==2.7.1 torchvision==0.22.1 --index-url https://download.pytorc
 # install flash 
 pip install flash-attn --no-build-isolation
 
-# TODO: to be verified
 # install other dependencies
 pip install -r requirements.txt
 
