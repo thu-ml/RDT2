@@ -33,13 +33,22 @@
 </div>
 
 ## Table of Contents
+- [Table of Contents](#table-of-contents)
 - [Overview](#overview)
 - [Updates](#updates)
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Model Checkpoints](#model-checkpoints)
 - [Running Inference for a Pre-Trained Model](#running-inference-for-a-pre-trained-model)
+  - [1. \[IMPORTANT\] Hard-ware Set up and Calibration](#1-important-hard-ware-set-up-and-calibration)
+  - [2. Run Inference](#2-run-inference)
 - [Fine-Tuning Models on Your Own Data](#fine-tuning-models-on-your-own-data)
+  - [1. Convert your data to WebDataset shards](#1-convert-your-data-to-webdataset-shards)
+  - [2. Defining training configs and running training](#2-defining-training-configs-and-running-training)
+  - [3. Run training](#3-run-training)
+    - [RDT2-VQ](#rdt2-vq)
+  - [Precision Settings](#precision-settings)
+- [Troubleshooting](#troubleshooting)
 
 ## Overview
 
@@ -137,7 +146,51 @@ We provide multiple VLA model checkpoints with capabilities to deploy on various
 
 ### 1. [IMPORTANT] Hard-ware Set up and Calibration
 
-🚧 In progress 🚧
+
+1. Build deployment hardware according to our [Hardware Guide](https://docs.google.com/document/d/1HUeM4Wlt4PyINoEwci-hxm8U9wAxiPMgR3sHyaOAsck/edit?tab=t.0#heading=h.sbdalb8w1kk1).
+
+2. Set up Robots
+
+- 2.1 Set up UR5e  
+   - Obtain IP address and update [configs/robots/eval_bimanual_ur5e_config.yaml](configs/robots/eval_bimanual_ur5e_config.yaml)/robots/robot_ip.  
+  - In Installation > Payload  
+    - Set mass to 0.82 kg  
+    - Set Inertia Matrix to  
+      ```
+      [0.001, 0, 0,
+       0, 0.001, 0,
+       0, 0, 0.001]
+      ```
+
+- 2.2 Set up Franka FR3  
+  - Obtain IP address and update [configs/robots/eval_bimanual_fr3_config.yaml](configs/robots/eval_bimanual_fr3_config.yaml)/robots/robot_ip.  
+  - On the Franka interface website  
+    - Set gripper mass to 1.9 kg  
+    - Set Inertia Tensor to  
+      ```
+      [0.001, 0, 0,
+       0, 0.001, 0,
+       0, 0, 0.001]
+      ```
+
+3. Set up camera
+   * Download SDK from [HikRobot website](https://www.hikrobotics.com/cn/machinevision/service/download/?module=0) and install all the `.deb` files.
+   * Run `cd /opt/MVS/bin && ./MVS.sh`. Select your camera, and adjust Acquisition Control -> Exposure Time to 20000.
+  
+4. Calibrate your robot to tracker's tcp space
+ * Follow Setup Instructions For Calibration in [Hardware Guide](https://docs.google.com/document/d/1HUeM4Wlt4PyINoEwci-hxm8U9wAxiPMgR3sHyaOAsck/edit?tab=t.0#heading=h.sbdalb8w1kk1).
+ * Run the following code to calibrate robot tcp space to tracker's space.
+ * IMPORTANT: This script makes the robot perform small-amplitude sinusoidal motions; before running the script, please ensure the robot is in a safe position and the workspace is free of obstacles.
+    ```
+    python deploy/calibration/calibrate_franka.py --franka_ip <your_franka_ip> # if using Franka Research 3
+    # or
+    python deploy/calibration/calibrate_ur5e.py --ur5e_ip <your_ur5e_ip> # if using UR5e
+    ```
+  * After calibration, run the following script to obtain the calibration matrix:
+    ```
+    python deploy/calibration/compute_calibration_matrix.py
+    ```
+    Then paste the calibration matrix to eval_bimanual_ur5e_config.yaml/tx_tracker_to_tcp (or fr3 if using FR3).
 
 ### 2. Run Inference
 

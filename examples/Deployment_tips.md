@@ -1,7 +1,6 @@
 # Deployment Tips for RDT2
 
 This document provides tips and best practices for deploying RDT2 in various environments.
-Here’s a polished English version, formatted for a **tips document** with clear and consistent style:
 
 * Perform proper calibration; you can use the replay script to check whether calibration is successful. 
   ```
