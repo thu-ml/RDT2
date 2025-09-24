@@ -10,8 +10,10 @@ pip install -r requirements/franka_research_3.txt
 
 ## 1. Set up configurations.
 
-- Franka Research 3 Robot Launch your franka polymetis server(You may refer to [this](https://github.com/real-stanford/universal_manipulation_interface/blob/main/franka_instruction.md) for guidance), obtain 
+- Franka Research 3 Robot:
+ Launch your franka polymetis server(You may refer to [this](https://github.com/real-stanford/universal_manipulation_interface/blob/main/franka_instruction.md) for guidance, use [launch_franka_server.py](launch_franka_server.py) as the FrankaInterface Server), obtain 
  Robot IP and modify configs/robots/eval_bimanual_fr3_config.yaml/robot/robot_ip
+
 - HikRobot Camera: run the following code to get camera serials:
     ```
     python deploy/get_camera_serials.py
@@ -21,34 +23,35 @@ pip install -r requirements/franka_research_3.txt
     ```
     python deploy/get_gripper_serial.py
     ```
-    and modify configs/robots/eval_bimanual_fr3_config.yaml/grippers/serial.
+    and modify configs/robots/eval_bimanual_fr3_config.yaml/grippers/serials
 
 ## 2. Run Inference
 
 Make sure the calibration matrix is properly set in configs/robots/eval_bimanual_fr3_config.yaml/tx_tracker_to_tcp.
 
-Run the following code to reset robot and gripper:
+Run the following code to reset gripper. The Franka robot is automatically reset to the home pose.
+
+
+IMPORTANT: This script makes the robot reset to an initial pose; before running the script, please ensure the robot is in a safe position and the workspace is free of obstacles.
 
 ```bash
 python deploy/reset_robot_gripper.py \
     --robot_config=configs/robots/eval_bimanual_fr3_config.yaml
 ```
 
-Run the following code to run inference:
+Run the following code to start inference:
 
 ```bash
 python deploy/inference_real_vq.py \
     --data_config=configs/bimanual_video_data.yaml \
-    --robot_config=configs/robots/eval_bimanual_ur5e_config.yaml\
+    --robot_config=configs/robots/eval_bimanual_fr3_config.yaml\
     -v <your_vqvae_checkpoint>  \ 
     -i <your_vqvla_checkpoint> \
     -o <your_output_directory> \
     --instruction <your_instruction> \
 ```
 
-Press "C" to start inference, press "Q" to exit.
-
-You can also run the following code to start a multi-instruction inference process. Press "S" to stop the current inference, input a new instruction, then press "C" to start inference.
+You can also run the following code to start a multi-instruction inference process. Press "S" to stop the current inference, input a new instruction, then press enter to continue inference with the new instruction
 
 ```bash
 python deploy/inference_real_vq.py \

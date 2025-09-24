@@ -84,12 +84,14 @@ def solve_sphere_collision(ee_poses, robots_config):
 @click.option('--instruction', type=str, default=None)
 @click.option('--codec', type=str, default='ffv1')
 @click.option('--binarize_gripper', '-bg', is_flag=True, default=False, help="Binarize gripper action.")
+@click.option('--interact', is_flag=True, default=False, help="Interactive mode.")
 # Add global cache for models
 def main(
     input, output, vae_path, data_config, robot_config,
     steps_per_inference, max_duration,
     frequency, command_latency,
     instruction, codec, binarize_gripper,
+    interact,
 ):
     # Initialize cache attributes
     if not hasattr(main, '_cached_processor'):
@@ -183,7 +185,7 @@ def main(
                 max_pos_speed=2.0,
                 max_rot_speed=6.0,
                 shm_manager=shm_manager) as env:
-            # print("[DBG] Env creaated")
+
             cv2.setNumThreads(1)
             print("Waiting for camera")
             time.sleep(1.0)
@@ -300,16 +302,6 @@ def main(
 
             print('Ready!')
             while True:
-                # ========= human control loop ==========
-                print("Human in control!")
-                robot_states = env.get_robot_state()
-                target_pose = np.stack([rs['TargetTCPPose'] for rs in robot_states])
-                print("[DBG] ", target_pose)
-
-                gripper_states = env.get_gripper_state()
-                gripper_target_pos = np.asarray([gs['gripper_position'] for gs in gripper_states])
-                print("[DBG] ", gripper_target_pos)
-
                 control_robot_idx_list = [0]
 
                 t_start = time.monotonic()
@@ -344,14 +336,13 @@ def main(
                     update_image(vis_img)
                     
                     press_events = key_counter.get_press_events()
-                    start_policy = False
+                    start_policy = True
                     for key_stroke in press_events:
                         if key_stroke == KeyCode(char='q'):
                             # Exit program
                             env.end_episode()
                             exit(0)
-                        elif key_stroke == KeyCode(char='c'):
-                            start_policy = True
+                        
                             
                     if start_policy:
                         break
@@ -443,8 +434,6 @@ def main(
                                 instruction=instruction
                             )
                             raw_action = result['action_pred'][0].detach().to('cpu').numpy()
-                            # print("[DBG] ", raw_action)
-                            # assert False
                             
                             # support unimanual manipulation
                             if len(robots_config) < 2:
@@ -502,10 +491,6 @@ def main(
                         action_timestamps = (np.arange(1, len(action) + 1, dtype=np.float64)
                             ) * dt + time.time() # FIXME: alternative without latency matching (for debug)
 
-                        # print(action_timestamps)
-                        # print(t_cycle_end)
-
-                        # print(dt)
                         action_exec_latency = 0.01
                         curr_time = time.time()
                         is_new = action_timestamps > (curr_time + action_exec_latency)
@@ -547,15 +532,6 @@ def main(
                         )
                         update_image(vis_img)
                         
-                        press_events = key_counter.get_press_events()
-                        stop_episode = False
-                        for key_stroke in press_events:
-                            if key_stroke == KeyCode(char='s'):
-                                # Stop episode
-                                # Hand control back to human
-                                print('Stopped.')
-                                stop_episode = True
-
                         t_since_start = time.time() - eval_t_start
                         if t_since_start > max_duration:
                             print("Max Duration reached.")
@@ -578,6 +554,17 @@ def main(
                             time.sleep(1 / frequency)
                         iter_idx += steps_per_inference
                         
+                        press_events = key_counter.get_press_events()
+                        stop_episode = False
+                        for key_stroke in press_events:
+                            if key_stroke == KeyCode(char='s') and interact:
+                                new_instruction = input("New instruction: ")
+                                if new_instruction.strip():
+                                    instruction = new_instruction.strip()
+                                    print(f"Updated instruction to: {instruction}")
+                                else:
+                                    print("No instruction provided, keeping current instruction.")
+
                 except KeyboardInterrupt:
                     print("Interrupted!")
                     # stop robot.

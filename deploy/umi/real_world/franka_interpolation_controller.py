@@ -242,7 +242,7 @@ class FrankaInterpolationController(mp.Process):
         print(f"FrankaInterpolationController run")
         # start polymetis interface
         robot = FrankaInterface(self.robot_ip, self.robot_port)
-        robot.go_home()
+        # robot.go_home()
         try:
             if self.verbose:
                 print(f"[FrankaPositionalController] Connect to robot: {self.robot_ip}")

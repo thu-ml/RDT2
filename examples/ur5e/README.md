@@ -28,12 +28,14 @@ Make sure the calibration matrix is properly set in configs/robots/eval_bimanual
 
 Run the following code to reset robot and gripper:
 
+IMPORTANT: This script makes the robot reset to an initial pose; before running the script, please ensure the robot is in a safe position and the workspace is free of obstacles.
+
 ```bash
 python deploy/reset_robot_gripper.py \
     --robot_config=configs/robots/eval_bimanual_ur5e_config.yaml
 ```
 
-Run the following code to run inference:
+Run the following code to start inference:
 
 ```bash
 python deploy/inference_real_vq.py \
@@ -45,9 +47,8 @@ python deploy/inference_real_vq.py \
     --instruction <your_instruction> \
 ```
 
-Press "C" to start inference, press "Q" to exit.
+You can also run the following code to start a multi-instruction inference process. Press "S" to stop the current inference, input a new instruction, then press enter to continue inference with the new instruction
 
-You can also run the following code to start a multi-instruction inference process. Press "S" to stop the current inference, input a new instruction, then press "C" to start inference.
 
 ```bash
 python deploy/inference_real_vq.py \

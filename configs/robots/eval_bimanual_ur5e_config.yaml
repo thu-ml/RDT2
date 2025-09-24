@@ -54,14 +54,14 @@
     {
       "gripper_type": "zhixing",
       "serial": "4294935675",
-      "gripper_obs_latency": 0.0157, "gripper_action_latency": 0.167,
+      "gripper_obs_latency": 0.0157, "gripper_action_latency": 0,
       "force": 30,
       "open_width": 0.12, "closed_width": 0.0, "finger_thickness": 0.023
     },
     {
       "gripper_type": "zhixing",
       "serial": "1638440",
-      "gripper_obs_latency": 0.0157, "gripper_action_latency": 0.167,
+      "gripper_obs_latency": 0.0157, "gripper_action_latency": 0,
       "force": 30,
       "open_width": 0.12, "closed_width": 0.0, "finger_thickness": 0.023
     }
