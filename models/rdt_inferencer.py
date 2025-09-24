@@ -11,8 +11,8 @@ import cv2
 from transformers import Qwen2_5_VLForConditionalGeneration, AutoProcessor
 
 from models.normalizer import LinearNormalizer
-from rdt.models.rdt_runner import RDTRunner
-from rdt.models.rdt_distill_runner import RDTDistillRunner
+from models.rdt_runner import RDTRunner
+from models.rdt_distill_runner import RDTDistillRunner
 
 
 class RDTInferencer:

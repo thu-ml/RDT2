@@ -5,7 +5,7 @@ import torch
 import torch.nn.functional as F
 from torch import nn
 
-from rdt.models.rdt.norm import RMSNorm
+from models.rdt.norm import RMSNorm
 
 
 def repeat_kv(x: torch.Tensor, n_rep: int) -> torch.Tensor:

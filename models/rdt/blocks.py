@@ -6,8 +6,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from timm.models.vision_transformer import Mlp
 
-from rdt.models.rdt.norm import RMSNorm
-from rdt.models.rdt.attention import Attention, CrossAttention
+from models.rdt.norm import RMSNorm
+from models.rdt.attention import Attention, CrossAttention
 
 
 def modulate(x, shift, scale):

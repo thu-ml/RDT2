@@ -6,8 +6,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.distributions import LogisticNormal
 
-from rdt.models.hub_mixin import CompatiblePyTorchModelHubMixin
-from rdt.models.rdt.model import RDT
+from models.hub_mixin import CompatiblePyTorchModelHubMixin
+from models.rdt.model import RDT
 
 
 class RDTRunner(

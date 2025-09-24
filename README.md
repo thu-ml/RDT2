@@ -73,9 +73,10 @@ To run the models in this repository, you will need an NVIDIA GPU with at least 
 
 | Mode               | RAM Required | VRAM Required | Example GPU        |
 | ------------------ | --------------- | --------------- | ------------------ |
-| Inference          | > 32 GB      | 16 GB | RTX 4090           |
-| Fine-Tuning (LoRA) |   -     | > 32 GB | A100 (40GB)           |
-| Fine-Tuning (Full) |   -    |  > 80 GB  | A100 (80GB) / H100 / B200|
+| Inference          | > 32 GB      | ~ 16 GB | RTX 4090           |
+| Fine-Tuning RDT2-FM (RDT Expert) |   -     | ~ 16 GB | RTX 4090           |
+| Fine-Tuning RDT2-VQ (LoRA) |   -     | > 32 GB | A100 (40GB)           |
+| Fine-Tuning RDT2-VQ (Full) |   -    |  > 80 GB  | A100 (80GB) / H100 / B200|
 
 As for zero-shot deployment, you need to purchase the designated _end effector_ and _camera_, and 3D print the corresponding _camera stand_ and _flange_ according to [Harware Set up and Calibration](#1-important-hard-ware-set-up-and-calibration).
 
@@ -344,10 +345,9 @@ TASK="bimanual-ur5e-example"  # Define your task name here
 DATASET_CONFIG_PATH="configs/datasets/example.yaml"  # Define your dataset config path here
 
 export TOKENIZER_ID="Qwen/Qwen2.5-VL-7B-Instruct"
-export VAE_ID="robotics-diffusion-transformer/RVQActionTokenizer"    # TODO: modify to huggingface link
-export MODEL_ID="robotics-diffusion-transformer/RDT2-VQ"   # TODO: modify to RDT2-VQ
+export VAE_ID="robotics-diffusion-transformer/RVQActionTokenizer" 
+export MODEL_ID="robotics-diffusion-transformer/RDT2-VQ"
 export OUTPUT_DIR="outputs/vqvla-sft-${TASK}" # Define your output directory here
-# TODO: add normalizer path
 
 if [ ! -d "$OUTPUT_DIR" ]; then
     mkdir "$OUTPUT_DIR"
@@ -388,22 +388,9 @@ we sincerely suggest you firstly to check the statistics of your data are within
 
 **Note:** We provide a [script]() for compute normalization statistics fo action normalization for bound violation check. This can be beneficial if you are fine-tuning to a new task on a robot. 
 
+#### RDT2-FM
 
-<!-- ### 3. Spinning up a policy server and running inference
-
-Once training is complete, we can run inference by spinning up a policy server and then querying it from a LIBERO evaluation script. Launching a model server is easy (we use the checkpoint for iteration 20,000 for this example, modify as needed):
-
-```bash
-uv run scripts/serve_policy.py policy:checkpoint --policy.config=pi05_libero --policy.dir=checkpoints/pi05_libero/my_experiment/20000
-```
-
-This will spin up a server that listens on port 8000 and waits for observations to be sent to it. We can then run an evaluation script (or robot runtime) that queries the server.
-
-For running the LIBERO eval in particular, we provide (and recommend using) a Dockerized workflow that handles both the policy server and the evaluation script together. See the [LIBERO README](examples/libero/README.md) for more details. -->
-
-<!-- If you want to embed a policy server call in your own robot runtime, we have a minimal example of how to do so in the [remote inference docs](docs/remote_inference.md). -->
-
-
+Currently, we support the following fine-tuning RDT Flow-Matching Action Expert with DeepSpeed:We provide example fine-tuning scripts for [full-parameter action expert](scripts/finetune_rdt.sh) fine-tuning. After specifying your own [dataset config path](scripts/finetune_rdt.sh) and replacing the `<repository-path>` in [full-parameter action expert](scripts/finetune_rdt.sh) with your own repository path, you can directly run this script to kick off training. 
 
 ### Precision Settings
 

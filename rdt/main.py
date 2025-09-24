@@ -1,6 +1,6 @@
 import argparse
 import os
-from rdt.train.train import train
+from rdt.train import train
 
 from accelerate.logging import get_logger
 

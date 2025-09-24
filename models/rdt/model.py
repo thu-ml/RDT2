@@ -4,8 +4,8 @@ from typing import List, Tuple, Optional
 import torch
 import torch.nn as nn
 
-from rdt.models.rdt.blocks import FinalLayer, RDTBlock, TimestepEmbedder
-from rdt.models.rdt.pos_emb import get_multimodal_pos_embed
+from models.rdt.blocks import FinalLayer, RDTBlock, TimestepEmbedder
+from models.rdt.pos_emb import get_multimodal_pos_embed
 
 
 class RDT(nn.Module):
