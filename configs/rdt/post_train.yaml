@@ -1,0 +1,70 @@
+common:
+  # The number of historical images
+  img_history_size: 1
+  # The number of future actions to predict
+  action_chunk_size: 24
+  # The number of cameras to be used in the model
+  num_cameras: 2
+  # Dimension for action
+  action_dim: 20
+  # Dimension for proprio: 3x2 ee_states + 6d rep for rot x 2 + 2 gripper_states
+  state_dim: 20
+  # System frequency
+  fps: 30
+  # Latency in frames
+  camera_obs_latency_frames: 0  # should be 2, currently ignore
+    # arm and gripper have a very small observation latency
+    # assumed to be 0 frames
+  grip_exe_latency_frames: 4
+  arm_exe_latency_frames: 4
+
+dataset:
+  # Names of each camera in the dataset
+  # NOTE: put the exterior camera first
+  camera_names: ["left_stereo", "right_stereo"]
+  # Whether to use jpeg compression
+  use_jpeg: false
+  # We will filter the episodes with length less than `epsd_len_thresh_low`
+  epsd_len_thresh_low: 200
+  # For those more than `epsd_len_thresh_high`,
+  # we will randomly sample `epsd_len_thresh_high` steps each time we load the episode
+  # to better balance the training datasets
+  epsd_len_thresh_high: null
+  # How to fit the image size
+  # image_aspect_ratio: pad
+  # Maximum number of language tokens
+  # tokenizer_max_length: 1024
+
+model:
+  # Config for condition adpators
+  # lang_adaptor: mlp2x_silu  # NOTE: directly use kv cache from Qwen2.5-VL-7B-Instruct
+  # img_adaptor: mlp2x_silu
+  act_adaptor: mlp3x_silu
+  state_adaptor: mlp3x_silu
+  # lang_token_dim: 3584
+  # selected_layers: [5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25]
+  selected_layers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+  img_token_dim: 2176
+  # Config for RDT structure
+  rdt:
+    # 4.229 M
+    hidden_size: 1024
+    depth: 14
+    num_heads: 8 # NOTE: ensure `hidden_size` / `num_heads` = 128 to match Qwen2.5-VL-7B-Instruct
+
+    # # 3.75B
+    # hidden_size: 2048
+    # depth: 28
+    # num_heads: 32
+
+    num_register_tokens: 4
+    norm_eps: 0.00001
+    # make SwiGLU hidden layer size multiple of large power of 2
+    multiple_of: 256
+    ffn_dim_multiplier: null
+    # Grouped Query Attention
+    num_kv_heads: 4 # NOTE: to match Qwen2.5-VL-7B-Instruct
+    use_flash_attn: true
+  # For noise scheduler (flow matching)
+  noise_scheduler:
+    num_inference_timesteps: 5
