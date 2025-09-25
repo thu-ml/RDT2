@@ -5,9 +5,11 @@ bitsandbytes==0.46.1
 deepspeed==0.17.2
 imgaug==0.4.0
 numpy==1.26.4
-peft==0.16.0
+peft==0.17.1
 webdataset==1.0.2
 zarr==2.18.3
+diffusers==0.35.1
+timm==1.0.15
 av
 click
 dill
