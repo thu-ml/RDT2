@@ -37,7 +37,6 @@ import h5py
 import numpy as np
 import torch
 from omegaconf import OmegaConf
-from transformers import Qwen2_5_VLForConditionalGeneration, AutoProcessor
 from PIL import Image, ImageTk
 import tkinter as tk
 

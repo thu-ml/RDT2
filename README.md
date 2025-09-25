@@ -59,13 +59,14 @@ RDT2, the sequel to [RDT-1B](https://rdt-robotics.github.io/rdt-robotics/), is t
 
 Currently, this repo contains models:
 - the [RDT2-VQ](https://huggingface.co/robotics-diffusion-transformer/RDT2-VQ), an auto vision-language-action model (VLA) which employs [Residual VQ](https://arxiv.org/abs/2107.03312) as the action tokenizer, is adapted from [Qwen2.5-VL-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-VL-7B-Instruct) with our UMI dataset, enabling superior zero-shot instruction-following capability.
+- the [RDT2-FM](https://huggingface.co/robotics-diffusion-transformer/RDT2-FM), an improved RDT model as action expert with flow-matching objective, running with much lower inference latency.
 
 For all models, we provide checkpoints and examples for using them out of the box or fine-tuning them to your own datasets. Currently, we have verified the efficay of our models on platforms including [Bimanual UR5e](https://www.universal-robots.com/products/ur5e/) and [Bimanual Franka Research 3](https://franka.de/franka-research-3), and we are optimistic will able to deploy them successfully on more platforms in the future by following our [guidelines](#running-inference-for-a-pre-trained-model).
 
 
 ## Updates
 
-- [Sept 2025] We released [RDT2-VQ](https://huggingface.co/robotics-diffusion-transformer/RDT2-VQ), the sequel of RDT-1B with better open-world generalization and zero-shot deployment on unseen embodiments.
+- [Sept 2025] We released [RDT2-VQ](https://huggingface.co/robotics-diffusion-transformer/RDT2-VQ) \& [RDT2-FM](https://huggingface.co/robotics-diffusion-transformer/RDT2-FM), the sequel of RDT-1B with better open-world generalization and zero-shot deployment on unseen embodiments.
 
 ## Requirements
 
@@ -128,6 +129,7 @@ We provide multiple VLA model checkpoints with capabilities to deploy on various
 | normalizer      | Inference & Fine-Tuning (Freeze) | Normalizer for action normalization   | [umi_normalizer_wo_downsample_indentity_rot.pt](http://ml.cs.tsinghua.edu.cn/~lingxuan/rdt2/umi_normalizer_wo_downsample_indentity_rot.pt)    |
 | Residual VQ  | Inference & Fine-Tuning (Freeze) |  Residual VQ (RVQ) as the action tokenizer   | [`robotics-diffusion-transformer/RVQActionTokenizer`](https://huggingface.co/robotics-diffusion-transformer/RVQActionTokenizer)    |
 | RDT2-VQ      | Inference & Fine-Tuning | Auto-regressive VLA with Residual VQ as the action tokenizer   | [`robotics-diffusion-transformer/RDT2-VQ`](https://huggingface.co/robotics-diffusion-transformer/RDT2-VQ)    |
+| RDT2-FM      | Inference & Fine-Tuning | Auto-regressive VLA (RDT2-VQ) with Flow-Matching Action Expert   | [`robotics-diffusion-transformer/RDT2-FM`](https://huggingface.co/robotics-diffusion-transformer/RDT2-FM)    |
 
 <!-- | $\pi_0$-FAST | Fine-Tuning | Base autoregressive [π₀-FAST model](https://www.physicalintelligence.company/research/fast) for fine-tuning | `gs://openpi-assets/checkpoints/pi0_fast_base` |
 | $\pi_{0.5}$    | Fine-Tuning | Base [π₀.₅ model](https://www.physicalintelligence.company/blog/pi05) for fine-tuning    | `gs://openpi-assets/checkpoints/pi05_base`      | -->
@@ -238,8 +240,8 @@ result = batch_predict_action(
         {
             "obs": {
                 # NOTE: following the setting of UMI, camera0_rgb for right arm, camera1_rgb for left arm
-                "camera0_rgb": ..., # RGB image in np.ndarray of shape (1, 384, 384, 3) with dtype=np.uint8
-                "camera1_rgb": ..., # RGB image in np.ndarray of shape (1, 384, 384, 3) with dtype=np.uint8
+                "camera0_rgb": ..., # right arm RGB image in np.ndarray of shape (1, 384, 384, 3) with dtype=np.uint8
+                "camera1_rgb": ..., # left arm RGB image in np.ndarray of shape (1, 384, 384, 3) with dtype=np.uint8
             },
             "meta": {
                 "num_camera": 2
@@ -270,13 +272,61 @@ action_chunk = result["action_pred"][0] # torch.FloatTensor of shape (24, 20) wi
 for robot_idx in range(2):
     action_chunk[:, robot_idx * 10 + 9] = action_chunk[:, robot_idx * 10 + 9] / 0.088 * 0.1
 ```
-You can also test this out in the [example notebook](examples/inference.ipynb).
+
+And you can also test the [RDT2-FM](https://huggingface.co/robotics-diffusion-transformer/RDT2-FM) with the following code:
+```python
+# Run under root directory of our repo
+import yaml
+
+from models.rdt_inferencer import RDTInferencer
+
+
+with open("configs/rdt/post_train.yaml", "r") as f:
+  model_config = yaml.safe_load(f)
+
+model = RDTInferencer(
+  config=model_config,
+  pretrained_path="robotics-diffusion-transformer/RDT2-FM",
+  # TODO: modify `normalizer_path` to your own downloaded normalizer path
+  # download from http://ml.cs.tsinghua.edu.cn/~lingxuan/rdt2/umi_normalizer_wo_downsample_indentity_rot.pt
+  normalizer_path="umi_normalizer_wo_downsample_indentity_rot.pt",  
+  pretrained_vision_language_model_name_or_path="robotics-diffusion-transformer/RDT2-VQ", # use RDT2-VQ as the VLM backbone
+  device="cuda:0",
+  dtype=torch.bfloat16,
+)
+
+result = model.step(
+    observations={
+        'images': {
+            # 'exterior_rs': np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8),
+            'left_stereo': ..., # left arm RGB image in np.ndarray of shape (384, 384, 3) with dtype=np.uint8
+            'right_stereo': ..., # right arm RGB image in np.ndarray of shape (384, 384, 3) with dtype=np.uint8
+        },
+        # use zero input current state for currently
+        # preserve input interface for future fine-tuning
+        'state': np.zeros(model_config["common"]["state_dim"]).astype(np.float32)
+    },
+    instruction=instruction # Language instruction
+    # We suggest using Instruction in format "verb + object" with Capitalized First Letter and trailing period 
+)
+
+
+# relative action chunk in np.ndarray of shape (24, 20) with dtype=np.float32
+# with the same format as RDT2-VQ
+action_chunk = result.detach().cpu().numpy()
+
+# rescale gripper width from [0, 0.088] to [0, 0.1]
+for robot_idx in range(2):
+    action_chunk[:, robot_idx * 10 + 9] = action_chunk[:, robot_idx * 10 + 9] / 0.088 * 0.1
+```
+
+<!-- You can also test this out in the [example notebook](examples/inference.ipynb). -->
 
 We provide detailed step-by-step examples for running inference of our pre-trained checkpoints on [Bimanual UR5e](examples/ur5e/README.md) and [Bimanual Franka Research 3](examples/fr3/README.md) robots.
 
 <!-- **Remote Inference**: We provide [examples and code](docs/remote_inference.md) for running inference of our models **remotely**: the model can run on a different server and stream actions to the robot via a websocket connection. This makes it easy to use more powerful GPUs off-robot and keep robot and policy environments separate. -->
 
-**Test inference without a robot**: We provide a [script](examples/simple_client/README.md) for testing inference without a robot. This script will generate a random observation and run inference with the model. See [here](examples/simple_client/README.md) for more details.
+<!-- **Test inference without a robot**: We provide a [script](examples/simple_client/README.md) for testing inference without a robot. This script will generate a random observation and run inference with the model. See [here](examples/simple_client/README.md) for more details. -->
 
 
 ## Fine-Tuning Models on Your Own Data
@@ -391,7 +441,7 @@ we sincerely suggest you firstly to check the statistics of your data are within
 
 #### RDT2-FM
 
-Currently, we support fine-tuning RDT-FM's Action Expert with DeepSpeed: We provide example fine-tuning scripts for [full-parameter action expert](scripts/finetune_rdt.sh) fine-tuning. After specifying your own [dataset config path](scripts/finetune_rdt.sh#L20) and replacing the `<repository-path>` in [full-parameter action expert](scripts/finetune_rdt.sh#L42) with your own repository path, you can directly run this script to kick off training. 
+Currently, we support fine-tuning RDT2-FM's Action Expert with DeepSpeed: We provide example fine-tuning scripts for [full-parameter action expert](scripts/finetune_rdt.sh) fine-tuning. After specifying your own [dataset config path](scripts/finetune_rdt.sh#L20) and replacing the `<repository-path>` in [full-parameter action expert](scripts/finetune_rdt.sh#L42) with your own repository path, you can directly run this script to kick off training. 
 
 ### Precision Settings
 
@@ -405,7 +455,8 @@ Since the size of Residual VQ is very small, we use `float32` for both training 
 
 Uses full `bfloat16` (default) following Qwen2.5-VL. You can follow the practice for [Qwen2.5-VL](https://github.com/QwenLM/Qwen2.5-VL) to adjust the precision by applying techniques like mixed precision or quantization.
 
-**RDT Action Expert ([RDT2-FM](link) \& [RDT2-FM-UltraFast](link)):**
+<!-- **RDT Action Expert ([RDT2-FM](robotics-diffusion-transformer/RDT2-FM) \& [RDT2-FM-UltraFast](robotics-diffusion-transformer/RDT2-FM-UltraFast)):** -->
+**RDT Action Expert ([RDT2-FM](robotics-diffusion-transformer/RDT2-FM):**
 
 Uses full `bfloat16` for both training and inference. 
 
