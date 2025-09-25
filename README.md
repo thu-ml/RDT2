@@ -298,7 +298,6 @@ model = RDTInferencer(
 result = model.step(
     observations={
         'images': {
-            # 'exterior_rs': np.random.randint(0, 255, (480, 640, 3), dtype=np.uint8),
             'left_stereo': ..., # left arm RGB image in np.ndarray of shape (384, 384, 3) with dtype=np.uint8
             'right_stereo': ..., # right arm RGB image in np.ndarray of shape (384, 384, 3) with dtype=np.uint8
         },
