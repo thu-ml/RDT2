@@ -31,13 +31,14 @@ Make sure the calibration matrix is properly set in configs/robots/eval_bimanual
 
 Run the following code to reset gripper. The Franka robot is automatically reset to the home pose.
 
-
 IMPORTANT: This script makes the robot reset to an initial pose; before running the script, please ensure the robot is in a safe position and the workspace is free of obstacles.
 
 ```bash
 python deploy/reset_robot_gripper.py \
     --robot_config=configs/robots/eval_bimanual_fr3_config.yaml
 ```
+
+### Run Inference with RDT-VQ
 
 Run the following code to start inference:
 
@@ -63,3 +64,21 @@ python deploy/inference_real_vq.py \
     --instruction <your_instruction> \
     --interact
 ```
+
+### Run Inference with RDT-FM
+
+Run the following code to start inference:
+
+```bash
+python deploy/inference_real_fm.py \
+    --input <your_rdt_checkpoint> \
+    --output <your_output_directory> \
+    --pretrained_vision_language_model_name_or_path <your_vqvla_checkpoint> \
+    --normalizer_path <your_normalizer_checkpoint> \
+    --model_config=configs/rdt/post_train.yaml \
+    --data_config=configs/bimanual_video_data.yaml \
+    --robot_config=configs/robots/eval_bimanual_fr3_config.yaml \
+    --instruction "Pick up the pink snack bag with the right hand." \
+```
+
+You can also add "--interact" to start a multi-instruction inference process.

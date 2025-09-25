@@ -12,8 +12,7 @@ from transformers import Qwen2_5_VLForConditionalGeneration, AutoProcessor
 
 from models.normalizer import LinearNormalizer
 from models.rdt_runner import RDTRunner
-from models.rdt_distill_runner import RDTDistillRunner
-
+# from models.rdt_distill_runner import RDTDistillRunner
 
 class RDTInferencer:
     """A wrapper for the RDT model for inference, which handles
@@ -107,8 +106,9 @@ class RDTInferencer:
         try:
             _model = RDTRunner.from_pretrained(pretrained)
         except TypeError:
-            print("Failed to load RDTRunner, trying RDTDistillRunner")
-            _model = RDTDistillRunner.from_pretrained(pretrained, rdt_config=RDT_CFG)
+            print("Failed to load RDTRunner")
+            # _model = RDTDistillRunner.from_pretrained(pretrained, rdt_config=RDT_CFG)
+            _model = None
 
         return _model
 
@@ -151,7 +151,7 @@ class RDTInferencer:
         if self.vision_encoder is not None:
             self.vision_encoder.eval()
             self.vision_encoder = self.vision_encoder.to(device, dtype=weight_dtype)
-
+        self.policy = torch.compile(self.policy)
         self.lang_embeds_cache = {}
         # self.observation_window = None
 
@@ -308,7 +308,7 @@ class RDTInferencer:
             image_embeds = image_embeds.to(device, dtype=dtype)
         else:
             image_embeds = None
-          
+
         vlang_kv_cache, vlang_attn_mask = self.encode_image_and_instruction(images, instruction)
         # text_embeds = text_embeds.to(device, dtype=dtype)
         # text_attn_mask = text_attn_mask.to(device, dtype=torch.bool)
@@ -322,7 +322,7 @@ class RDTInferencer:
         ) # torch.Tensor: (1, horizon, action_dim)
         # convert to cpu and float32 to match the device and dtype of the normalizer
         nsample = nsample.to(dtype=torch.float32).cpu()
-        
+
         trajectory = self.normalizer['action'].unnormalize(nsample)     # torch.Tensor: (1, horizon, action_dim)
         
         self.clear_lang_cache_if_exceed()
