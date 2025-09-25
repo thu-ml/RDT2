@@ -9,7 +9,6 @@ import json
 import click
 import cv2
 import yaml
-import h5py
 import numpy as np
 import torch
 from omegaconf import OmegaConf
@@ -85,6 +84,7 @@ def solve_sphere_collision(ee_poses, robots_config):
 @click.option('--codec', type=str, default='ffv1')
 @click.option('--binarize_gripper', '-bg', is_flag=True, default=False, help="Binarize gripper action.")
 @click.option('--interact', is_flag=True, default=False, help="Interactive mode.")
+@click.option('--use_vllm', is_flag=True, default=False, help="Use vllm for inference.")
 # Add global cache for models
 def main(
     input, output, vae_path, data_config, robot_config,
@@ -92,6 +92,7 @@ def main(
     frequency, command_latency,
     instruction, codec, binarize_gripper,
     interact,
+    use_vllm,
 ):
     # Initialize cache attributes
     if not hasattr(main, '_cached_processor'):
@@ -105,6 +106,10 @@ def main(
     if not hasattr(main, '_cached_normalizer'):
         main._cached_normalizer = None
         main._cached_normalizer_path = None
+    if use_vllm:
+        from vllm import LLM, SamplingParams
+        from deploy.vllm_utils import predict_action_vllm
+
     # Create tkinter window for visualization
     root = tk.Tk()
     root.title("Visualization")
@@ -209,18 +214,37 @@ def main(
             processor = main._cached_processor
             
             # Load model with caching
-            if True or not hasattr(main, '_cached_model') or main._cached_model is None or main._cached_model_path != input:
-                print("Loading model from scratch...")
-                main._cached_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
-                    input,
-                    torch_dtype=torch.bfloat16,
-                    attn_implementation="flash_attention_2",
-                    device_map=device
+            if use_vllm:
+                model = LLM(
+                    model=input, 
+                    dtype=torch.bfloat16,
+                    skip_tokenizer_init=True,
+                    tensor_parallel_size=1,  # Increase if you have multiple GPUs
+                    enforce_eager=False,     # Set to False to use CUDA graphs
+                    enable_chunked_prefill=True,
+                    gpu_memory_utilization=0.90,
+                    max_model_len=2048, 
+                    limit_mm_per_prompt={"image": 1},
+                    trust_remote_code=True
                 )
-                main._cached_model_path = input
+                sampling_params = SamplingParams(
+                    max_tokens=27 + 2,
+                    temperature=0.0,    # Greedy decoding
+                    detokenize=False,
+                )
             else:
-                print("Using cached model")
-            model = main._cached_model
+                if True or not hasattr(main, '_cached_model') or main._cached_model is None or main._cached_model_path != input:
+                    print("Loading model from scratch...")
+                    main._cached_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+                        input,
+                        torch_dtype=torch.bfloat16,
+                        attn_implementation="flash_attention_2",
+                        device_map=device
+                    )
+                    main._cached_model_path = input
+                else:
+                    print("Using cached model")
+                model = main._cached_model
 
             model.eval()
             
@@ -275,18 +299,32 @@ def main(
                 obs_dict = dict_apply(obs_dict_np,
                     lambda x: torch.from_numpy(x).to(device))
                 print(f"Instruction: {instruction}")
-                result = batch_predict_action(
-                    model, processor, vae, normalizer,
-                    examples=[{
-                        "obs": obs_dict,    
-                        "meta": {
-                            "num_camera": len(cameras_config)
-                        }
-                    }],
-                    valid_action_id_length=valid_action_id_length,
-                    apply_jpeg_compression=True,
-                    instruction=instruction
-                )
+                if use_vllm:
+                    result = predict_action_vllm(
+                        model, sampling_params, processor, vae, normalizer,
+                        examples=[{
+                            "obs": obs_dict,
+                            "meta": {
+                                "num_camera": len(cameras_config)
+                            }
+                        }],
+                        valid_action_id_length=valid_action_id_length,
+                        apply_jpeg_compression=True,
+                        instruction=instruction
+                    )
+                else:
+                    result = batch_predict_action(
+                        model, processor, vae, normalizer,
+                        examples=[{
+                            "obs": obs_dict,    
+                            "meta": {
+                                "num_camera": len(cameras_config)
+                            }
+                        }],
+                        valid_action_id_length=valid_action_id_length,
+                        apply_jpeg_compression=True,
+                        instruction=instruction
+                    )
                 action = result['action_pred'][0].detach().to('cpu').numpy()
                 # support unimanual manipulation
                 if len(robots_config) < 2:

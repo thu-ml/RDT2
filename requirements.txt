@@ -30,4 +30,4 @@ threadpoolctl
 tqdm
 safetensors
 wandb
-
+vllm

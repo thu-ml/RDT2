@@ -12,7 +12,6 @@ right_reset_joints_ur_deg = [-102.00, -112.00, -138.89, 54.98, 81.91, -1.68]
 left_reset_joints_ur = np.radians(left_reset_joints_ur_deg)
 right_reset_joints_ur = np.radians(right_reset_joints_ur_deg)
 
-
 left_reset_joints_franka = [0.790078, 0.741306, -1.13052, -2.77817, -0.124533, 4.41087, 2.21978]
 right_reset_joints_franka = [-0.6994, 0.623364, 0.777071, -2.69294, -0.274674, 4.33062, 1.15367]
 

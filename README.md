@@ -148,8 +148,7 @@ We provide multiple VLA model checkpoints with capabilities to deploy on various
 
 ### 1. [IMPORTANT] Hard-ware Set up and Calibration
 
-
-1. Build deployment hardware according to our [Hardware Guide](https://docs.google.com/document/d/1HUeM4Wlt4PyINoEwci-hxm8U9wAxiPMgR3sHyaOAsck/edit?tab=t.0#heading=h.sbdalb8w1kk1).
+1. Acquire deployment hardware according to our [Hardware Guide](https://docs.google.com/document/d/1HUeM4Wlt4PyINoEwci-hxm8U9wAxiPMgR3sHyaOAsck/edit?tab=t.0#heading=h.sbdalb8w1kk1).
 
 2. Set up Robots
 
@@ -159,11 +158,11 @@ We provide multiple VLA model checkpoints with capabilities to deploy on various
     - Set mass to 0.82 kg  
     - Set Inertia Matrix to  
       ```
-      [0.001, 0, 0,
-       0, 0.001, 0,
-       0, 0, 0.001]
+      [0.001106, 0, 0,
+       0, 0.001106, 0,
+       0, 0, 0.001106]
       ```
-    - Set speed to 30%
+    - Set speed to 30%(recommened)
   
 - 2.2 Set up Franka FR3  
   - Obtain IP address and update [configs/robots/eval_bimanual_fr3_config.yaml](configs/robots/eval_bimanual_fr3_config.yaml)/robots/robot_ip.  
@@ -178,10 +177,12 @@ We provide multiple VLA model checkpoints with capabilities to deploy on various
 
 3. Set up camera
    * Download SDK from [HikRobot website](https://www.hikrobotics.com/cn/machinevision/service/download/?module=0) and install all the `.deb` files.
-   * Run `cd /opt/MVS/bin && ./MVS.sh`. Select your camera, and adjust Acquisition Control -> Exposure Time to 20000.
+   * Run `cd /opt/MVS/bin && ./MVS.sh`. Select your camera, and set Acquisition Control -> Exposure Time to 20000.
   
 4. Calibrate your robot to tracker's tcp space
  * Follow Setup Instructions For Calibration in [Hardware Guide](https://docs.google.com/document/d/1HUeM4Wlt4PyINoEwci-hxm8U9wAxiPMgR3sHyaOAsck/edit?tab=t.0#heading=h.sbdalb8w1kk1).
+ * Set up Vive Tracker according to this [tutorial] ->Software Setup Tutorial ->VIVE tracker setup
+ (https://docs.google.com/document/d/1ANxSA_PctkqFf3xqAkyktgBgDWEbrFK7b1OnJe54ltw/edit?tab=t.0#heading=h.yxlxo67jgfyx)
  * Run the following code to calibrate robot tcp space to tracker's space.
  * IMPORTANT: This script makes the robot perform small-amplitude sinusoidal motions; before running the script, please ensure the robot is in a safe position and the workspace is free of obstacles.
     ```
@@ -193,7 +194,7 @@ We provide multiple VLA model checkpoints with capabilities to deploy on various
     ```
     python deploy/calibration/compute_calibration_matrix.py
     ```
-    Then paste the calibration matrix to eval_bimanual_ur5e_config.yaml/tx_tracker_to_tcp (or fr3 if using FR3).
+    Then paste the calibration matrix to eval_bimanual_ur5e_config.yaml/tx_tracker_to_tcp (or eval_bimanual_fr3_config.yaml/tx_tracker_to_tcp if using FR3).
 
 ### 2. Run Inference
 

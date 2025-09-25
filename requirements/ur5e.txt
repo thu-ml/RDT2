@@ -1,0 +1,10 @@
+ur-rtde==1.5.6
+pynput==1.7.6
+imagecodecs==2023.9.18
+atomics==1.0.2
+minimalmodbus
+zerorpc
+openvr
+# if you're using NVIDIA RTX 5090, re-install torch
+torch==2.8.0.dev20250418+cu128
+torchvision==0.22.0.dev20250418+cu128
