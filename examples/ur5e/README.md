@@ -81,3 +81,5 @@ python deploy/inference_real_fm.py \
 ```
 
 You can also add "--interact" to start a multi-instruction inference process.
+
+NOTE: If the inference success rate is still low after checking all the settings, configurations and calibrations, you can refer to the [deployment tips](../DEPLOYMENT_TIPS.md) for help.
