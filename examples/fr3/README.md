@@ -11,7 +11,7 @@ pip install -r requirements/franka_research_3.txt
 ## 1. Set up configurations.
 
 - Franka Research 3 Robot:
- Launch your franka polymetis server(You may refer to [this](https://github.com/real-stanford/universal_manipulation_interface/blob/main/franka_instruction.md) for guidance, use [launch_franka_server.py](launch_franka_server.py) as the FrankaInterface Server), obtain 
+ Launch your franka polymetis server(You may refer to [umi](https://github.com/real-stanford/universal_manipulation_interface/blob/main/franka_instruction.md) for guidance, use [launch_franka_server.py](launch_franka_server.py) as the FrankaInterface Server), obtain 
  Robot IP and modify configs/robots/eval_bimanual_fr3_config.yaml/robot/robot_ip
 
 - HikRobot Camera: run the following code to get camera serials:
@@ -21,7 +21,7 @@ pip install -r requirements/franka_research_3.txt
     and modify configs/robots/eval_bimanual_fr3_config.yaml/cameras/serials
 - Zhixing Gripper: run the following code to get gripper serial:
     ```
-    python deploy/get_gripper_serial.py
+    python deploy/get_gripper_serials.py
     ```
     and modify configs/robots/eval_bimanual_fr3_config.yaml/grippers/serials
 

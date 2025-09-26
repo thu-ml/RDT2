@@ -22,34 +22,19 @@ import time
 
 def main():
     fps = 30
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--ur5e_ip", type=str, default="192.168.56.10")
+    args = parser.parse_args()
     
-    # left, right
-    hand_side = "right"
-    
-    if hand_side == "left":
-        left_init_ur5e_pose = np.array(
-            [-0.55333694,  0.08912732,  0.4821487, -1.85780513, -1.54929041,  0.33376234]
-        ) # (6, )
-    elif hand_side == "right":
-        right_init_ur5e_pose = np.array(
-            [-0.55275827, -0.22214411,  0.4821487,  -1.68935553, -2.10261178,  0.89154967]
-        ) # (6, )
     shm_manager = SharedMemoryManager()
     shm_manager.start()
-    if hand_side == "left":
-        ur5e_config = RTDEInterpolationController(
-            shm_manager=shm_manager,
-            robot_ip="192.168.56.10",
-            frequency=125,
-            verbose=False
-        )
-    else:
-        ur5e_config = RTDEInterpolationController(
-            shm_manager=shm_manager,
-            robot_ip="192.168.56.20",
-            frequency=125,
-            verbose=False
-        )
+    ur5e_config = RTDEInterpolationController(
+        shm_manager=shm_manager,
+        robot_ip=args.ur5e_ip,
+        frequency=125,
+        verbose=False
+    )
     
     ur5e = ur5e_config
     ur5e.start()
@@ -93,10 +78,7 @@ def main():
         ur_posrotvec_lis.append(ur5e_posrotvec) # list of (6, )
     
     # Get initial position
-    if hand_side == "left":
-        init_ur5e_pose = left_init_ur5e_pose.copy()
-    else:
-        init_ur5e_pose = right_init_ur5e_pose.copy()
+    init_ur5e_pose = ur5e.get_state()['ActualTCPPose']
     
     # Convert rotation vector to rotation matrix
     def rotation_vector_to_matrix(rvec):

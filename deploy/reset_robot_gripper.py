@@ -44,7 +44,7 @@ if __name__ == "__main__":
             rtde_c.moveJ(reset_joints_ur[robot_id], 1.05, 1.4)
         elif robot['robot_type'] == 'franka':
             # The Franka robot is automatically reset to the home pose
-            pass
+            continue
         else:
             raise ValueError(f"Robot type {robot['robot_type']} reset is not supported for now.")
     print("Robot reset done.")

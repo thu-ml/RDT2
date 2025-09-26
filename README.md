@@ -184,12 +184,11 @@ We provide multiple VLA model checkpoints with capabilities to deploy on various
   
 4. Calibrate your robot to tracker's tcp space
  * Follow Setup Instructions For Calibration in [Hardware Guide](https://docs.google.com/document/d/1HUeM4Wlt4PyINoEwci-hxm8U9wAxiPMgR3sHyaOAsck/edit?tab=t.0#heading=h.sbdalb8w1kk1).
- * Set up Vive Tracker according to this [tutorial] ->Software Setup Tutorial ->VIVE tracker setup
- (https://docs.google.com/document/d/1ANxSA_PctkqFf3xqAkyktgBgDWEbrFK7b1OnJe54ltw/edit?tab=t.0#heading=h.yxlxo67jgfyx)
+ * Set up Vive Tracker according to this [tutorial](https://docs.google.com/document/d/1ANxSA_PctkqFf3xqAkyktgBgDWEbrFK7b1OnJe54ltw/edit?tab=t.0#heading=h.yxlxo67jgfyx) ->Software Setup Tutorial ->VIVE tracker setup
  * Run the following code to calibrate robot tcp space to tracker's space.
  * IMPORTANT: This script makes the robot perform small-amplitude sinusoidal motions; before running the script, please ensure the robot is in a safe position and the workspace is free of obstacles.
     ```
-    python deploy/calibration/calibrate_franka.py --franka_ip <your_franka_ip> # if using Franka Research 3
+    python deploy/calibration/calibrate_franka.py --franka_ip <your_franka_server_ip> --franka_port <your_franka_server_port> # if using Franka Research 3
     # or
     python deploy/calibration/calibrate_ur5e.py --ur5e_ip <your_ur5e_ip> # if using UR5e
     ```

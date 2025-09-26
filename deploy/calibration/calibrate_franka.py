@@ -151,13 +151,17 @@ def load_data():
 def main():
     action_data = load_data()
     fps = 30
-    
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--franka_ip", type=str, default="localhost")
+    parser.add_argument("--franka_port", type=int, default=4243)
+    args = parser.parse_args()
     shm_manager = SharedMemoryManager()
     shm_manager.start()
     franka = FrankaInterpolationController(
         shm_manager=shm_manager,
-        robot_ip="localhost",
-        robot_port=4243,
+        robot_ip=args.franka_ip,
+        robot_port=args.franka_port,
         frequency=300,
         verbose=False,
         receive_latency=0.001

@@ -14,9 +14,9 @@ class FrankaInterface:
     def __init__(self, franka_ip="192.168.3.100", poly_serve_port=50051):
         print(f"Connecting to Franka robot at {franka_ip} port {poly_serve_port}...")
         self.robot = RobotInterface(ip_address=franka_ip, port=poly_serve_port)
-        if poly_serve_port == 50051: # right arm
+        if poly_serve_port == 50051: # FIXME: right arm, change to your port
             self.robot.set_home_pose(franka_right_home_pose)
-        elif poly_serve_port == 50052: # left arm
+        elif poly_serve_port == 50052: # FIXME: left arm, change to your port
             self.robot.set_home_pose(franka_left_home_pose)
         self.go_home()
 

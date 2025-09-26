@@ -18,7 +18,7 @@ pip install -r requirements/ur5e.txt
     and modify configs/robots/eval_bimanual_ur5e_config.yaml/cameras/serials
 - Zhixing Gripper: run the following code to get gripper serial:
     ```
-    python deploy/get_gripper_serial.py
+    python deploy/get_gripper_serials.py
     ```
     and modify configs/robots/eval_bimanual_ur5e_config.yaml/grippers/serial.
 
