@@ -1,6 +1,6 @@
-# Contributing to RDT 2
+# Contributing to RDT2
 
-We welcome contributions, improvements, and modifications of all kinds. Everyone is free to use **RDT 2** in accordance with the [license](LICENSE). You are also encouraged to submit bug reports, feature requests, or pull requests. While we cannot guarantee that every pull request will be approved—our team is small and has limited bandwidth—we will make our best effort to review contributions. The following sections describe the process in detail.
+We welcome contributions, improvements, and modifications of all kinds. Everyone is free to use **RDT2** in accordance with the [license](LICENSE). You are also encouraged to submit bug reports, feature requests, or pull requests. While we cannot guarantee that every pull request will be approved—our team is small and has limited bandwidth—we will make our best effort to review contributions. The following sections describe the process in detail.
 
 ## Issues and Feature Requests
 
@@ -13,7 +13,7 @@ If you discover a bug or another issue, please first search existing GitHub Issu
 * The complete traceback of any exceptions
 * Any additional context that may help (e.g., screenshots)
 
-Reproducibility is critical. If you encountered the issue after modifying **RDT 2**, please attempt to reproduce it on an unmodified copy of `main` and share a code snippet that allows us to quickly replicate the problem.
+Reproducibility is critical. If you encountered the issue after modifying **RDT2**, please attempt to reproduce it on an unmodified copy of `main` and share a code snippet that allows us to quickly replicate the problem.
 
 For feature requests, please first check whether a similar request already exists. If not, please provide:
 

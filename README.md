@@ -6,7 +6,7 @@
 <div align="center">
   <h1 style="font-size: 4rem; font-weight: bold; color: #667eea; margin: 20px 0; display: flex; align-items: center; justify-content: center; gap: 20px;">
     <!-- <img src="assets/tsail_rdt.png" alt="TSAIL RDT" style="height: 8rem; width: auto;" /> -->
-    RDT 2: Enabling Zero-Shot Cross-Embodiment Generalization by Scaling Up UMI Data
+    RDT2: Enabling Zero-Shot Cross-Embodiment Generalization by Scaling Up UMI Data
   </h1>
 </div>
 <!-- <hr> -->
@@ -331,7 +331,7 @@ IMPORTANT: If the inference success rate is still low after checking all the set
 
 ## Fine-Tuning Models on Your Own Data
 
-We will fine-tune the RDT 2 models on the [example dataset from Bimanual UR5e](https://huggingface.co/datasets/robotics-diffusion-transformer/BimanualUR5eExample) as a running example for how to fine-tune a base model on your own data. We will explain three steps:
+We will fine-tune the RDT2 models on the [example dataset from Bimanual UR5e](https://huggingface.co/datasets/robotics-diffusion-transformer/BimanualUR5eExample) as a running example for how to fine-tune a base model on your own data. We will explain three steps:
 1. Convert your data to a [webdataset](https://github.com/webdataset/webdataset) shards (which we use for training for high-efficent IO)
 2. Define training configs
 3. Run training
