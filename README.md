@@ -18,8 +18,8 @@
   <br>
   <a href="https://discord.gg/vsZS3zmf9A"><img alt="Discord"
     src="https://img.shields.io/badge/Discord-RDT-7289da?logo=discord&logoColor=white&color=7289da"/></a>
-  <a href="https://rdt-robotics.github.io/rdt-robotics/wechat.html"><img alt="Wechat"
-    src="https://img.shields.io/badge/WeChat-RDT-brightgreen?logo=wechat&logoColor=white"/></a>
+<a href="https://rdt-robotics.github.io/rdt-robotics/feishu.html"><img alt="Feishu"
+    src="https://img.shields.io/badge/Feishu-RDT-blue?logo=lark&logoColor=white"/></a>
   <!-- <a href="https://twitter.com/deepseek_ai"><img alt="Twitter Follow"
     src="https://img.shields.io/badge/Twitter-deepseek_ai-white?logo=x&logoColor=white"/></a> -->
   <!-- <br> -->
