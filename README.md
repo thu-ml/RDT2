@@ -40,14 +40,15 @@
 - [Installation](#installation)
 - [Model Checkpoints](#model-checkpoints)
 - [Running Inference for a Pre-Trained Model](#running-inference-for-a-pre-trained-model)
-  <!-- - [1. \[IMPORTANT\] Hard-ware Set up and Calibration](#1-important-hard-ware-set-up-and-calibration)
-  - [2. Run Inference](#2-run-inference) -->
+  - [1. \[IMPORTANT\] Hard-ware Set up and Calibration](#1-important-hard-ware-set-up-and-calibration)
+  - [2. Run Inference](#2-run-inference)
 - [Fine-Tuning Models on Your Own Data](#fine-tuning-models-on-your-own-data)
-  <!-- - [1. Convert your data to WebDataset shards](#1-convert-your-data-to-webdataset-shards)
+  - [1. Convert your data to WebDataset shards](#1-convert-your-data-to-webdataset-shards)
   - [2. Defining training configs and running training](#2-defining-training-configs-and-running-training)
   - [3. Run training](#3-run-training)
     - [RDT2-VQ](#rdt2-vq)
-  - [Precision Settings](#precision-settings) -->
+    - [RDT2-FM](#rdt2-fm)
+  - [Precision Settings](#precision-settings)
 - [Troubleshooting](#troubleshooting)
 
 ## Overview
@@ -338,9 +339,9 @@ We will fine-tune the RDT2 models on the [example dataset from Bimanual UR5e](ht
 
 ### 1. Convert your data to WebDataset shards
 
-We provide example scripts for converting assumed data sturcture to a webdataset dataset in [`data/preprocess/robot`](data/preprocess/robot) with detailed [guidelines](data/preprocess/robot/README.md). You can easily modify it to convert your own data! 
+<!-- We provide example scripts for converting assumed data sturcture to a webdataset dataset in [`data/preprocess/robot`](data/preprocess/robot) with detailed [guidelines](data/preprocess/robot/README.md). You can easily modify it to convert your own data!  -->
+You should convert to a processed webdataset shards, with the following structure:
 
-Concretely, the sturcture of processed webdatset shardsis like this:
 ```bash 
 shard-000000.tar
 ├── 0.image.jpg   # Binocular (left wrist camera + right wrist camera) RGB image in np.ndarray of shape (384, 768, 3) with dtype=np.uint8
