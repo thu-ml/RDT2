@@ -101,7 +101,6 @@ def predict_action_vllm(
     text += "<|im_start|>assistant\n<|quad_start|>"
     image_lst = [image]
 
-    start_inference_time = time.time()
     output = vllm_model.generate(
         {
             "prompt": text,
@@ -112,7 +111,7 @@ def predict_action_vllm(
         use_tqdm=False,
         sampling_params=sampling_params)
     generated_ids = output[0].outputs[0].token_ids
-    print(f"Generated id time: {time.time() - start_inference_time}")
+
     # WARNING: for speed, we do not do valid inspection here
     action_ids = generated_ids[: valid_action_id_length]   # list
     batch_action_ids = torch.LongTensor(

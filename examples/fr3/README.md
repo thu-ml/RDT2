@@ -65,6 +65,8 @@ python deploy/inference_real_vq.py \
     --interact
 ```
 
+You can use `--use_vllm` to accelerate inference with vllm.
+
 ### Run Inference with RDT-FM
 
 Run the following code to start inference:

@@ -436,7 +436,7 @@ accelerate launch main.py \
 Although our RVQ demonstrates high generalization among both hand-held gripper data and real robot data. If you want to fine-tune on your own data with our Residual VQ as action tokenzer, 
 we sincerely suggest you firstly to check the statistics of your data are within the bound of our Residual VQ, and then test the reconstruction error of your data.
 
-**Note:** We provide a [script]() for compute normalization statistics fo action normalization for bound violation check. This can be beneficial if you are fine-tuning to a new task on a robot. 
+<!-- **Note:** We provide a [script]() for compute normalization statistics fo action normalization for bound violation check. This can be beneficial if you are fine-tuning to a new task on a robot.  -->
 
 #### RDT2-FM
 
