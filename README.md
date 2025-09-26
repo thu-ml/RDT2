@@ -305,7 +305,7 @@ result = model.step(
         # preserve input interface for future fine-tuning
         'state': np.zeros(model_config["common"]["state_dim"]).astype(np.float32)
     },
-    instruction=instruction # Language instruction
+    instruction="Pick up the apple." # Language instruction
     # We suggest using Instruction in format "verb + object" with Capitalized First Letter and trailing period 
 )
 
