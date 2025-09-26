@@ -160,7 +160,7 @@ We provide multiple VLA model checkpoints with capabilities to deploy on various
   - In Installation > Payload  
     - Set mass to 0.82 kg  
     - Set Inertia Matrix to  
-      ```
+      ```python
       [0.001106, 0, 0,
        0, 0.001106, 0,
        0, 0, 0.001106]
