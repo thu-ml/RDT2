@@ -46,8 +46,8 @@ Run the following code to start inference:
 python deploy/inference_real_vq.py \
     --data_config=configs/bimanual_video_data.yaml \
     --robot_config=configs/robots/eval_bimanual_fr3_config.yaml\
-    -v <your_vqvae_checkpoint>  \ 
-    -i <your_vqvla_checkpoint> \
+    -v <your_vqvae_checkpoint>  \  # e.g., "robotics-diffusion-transformer/RVQActionTokenizer"
+    -i <your_rdt2_vq_checkpoint> \ # e.g., "robotics-diffusion-transformer/RDT2-VQ"
     -o <your_output_directory> \
     --instruction <your_instruction> \
 ```
@@ -58,8 +58,8 @@ You can also run the following code to start a multi-instruction inference proce
 python deploy/inference_real_vq.py \
     --data_config=configs/bimanual_video_data.yaml \
     --robot_config=configs/robots/eval_bimanual_fr3_config.yaml\
-    -v <your_vqvae_checkpoint>  \ 
-    -i <your_vqvla_checkpoint> \
+    -v <your_vqvae_checkpoint>  \  # e.g., "robotics-diffusion-transformer/RVQActionTokenizer"
+    -i <your_rdt2_vq_checkpoint> \ # e.g., "robotics-diffusion-transformer/RDT2-VQ"
     -o <your_output_directory> \
     --instruction <your_instruction> \
     --interact
@@ -71,9 +71,9 @@ Run the following code to start inference:
 
 ```bash
 python deploy/inference_real_fm.py \
-    --input <your_rdt_checkpoint> \
+    --input <your_rdt_action_expert_checkpoint> \ # e.g., "robotics-diffusion-transformer/RDT2-FM"
     --output <your_output_directory> \
-    --pretrained_vision_language_model_name_or_path <your_vqvla_checkpoint> \
+    --pretrained_vision_language_model_name_or_path <your_rdt2_vq_checkpoint> \ # e.g., "robotics-diffusion-transformer/RDT2-VQ"
     --normalizer_path <your_normalizer_checkpoint> \
     --model_config=configs/rdt/post_train.yaml \
     --data_config=configs/bimanual_video_data.yaml \
