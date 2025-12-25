@@ -57,7 +57,7 @@ sudo apt install libboost-all-dev
 ## 5. 创建和激活虚拟环境
 
 ```bash
-python3 -m venv rdt2_5090_env
+python3.12 -m venv rdt2_5090_env
 source ~/pgj/RDT2_5090/rdt2/rdt2_5090_env/bin/activate  # 激活环境
 ```
 
@@ -103,7 +103,7 @@ pip3 install /home/ghzn/Downloads/flash_attn-2.8.3+cu12torch2.9cxx11abiTRUE-cp31
 ## 9. 安装其他依赖
 
 ```bash
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 ## 10. 验证 transformers 版本
@@ -111,13 +111,13 @@ pip install -r requirements.txt
 确保安装了正确版本的 transformers (4.51.3)：
 
 ```bash
-pip list | grep transformers
+pip3 list | grep transformers
 ```
 
 ## 11. 部署到 Franka Research 3 的额外依赖
 
 ```bash
-pip install -r requirements/franka_research_3.txt
+pip3 install -r requirements/franka_research_3.txt
 ```
 
 ## 注意事项
