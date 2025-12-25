@@ -45,10 +45,10 @@ pip3.12 install flash_attn-2.8.3+cu12torch2.9cxx11abiTRUE-cp312-cp312-linux_x86_
 ### 4. 安装 vLLM（关键步骤）
 
 ```bash
-cd ~/pgj/RDT2_5090_Py312/rdt2/vllm
-
-# 使用预编译版本安装，关键参数：--no-build-isolation
-VLLM_USE_PRECOMPILED=1 uv pip install --editable . --no-build-isolation
+git clone https://github.com/vllm-project/vllm.git
+cd vllm
+python3.12 use_existing_torch.py
+VLLM_USE_PRECOMPILED=1 uv pip install --editable . --no-build-isolation --refresh --verbose -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
 > 💡 **为什么需要 `--no-build-isolation`？**  
