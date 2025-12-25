@@ -23,13 +23,7 @@ sudo apt install python3.12 python3.12-venv python3.12-dev -y
 * `python3.12-venv`：用于创建虚拟环境的关键模块
 * `python3.12-dev`：包含开发头文件，后续某些 Python 包（如通过 `pip` 编译的包）可能会用到
 
-## 3. 验证安装When preparing a PR, please ensure that you:
-
-    Provide a clear and descriptive title and summary
-    Run pre-commit (after installing via pre-commit install)
-    Run ruff check . and ruff format .
-    Verify that all tests pass
-
+## 3. 验证安装
 
 安装完成后，运行以下命令检查：
 
