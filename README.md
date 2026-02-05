@@ -134,7 +134,7 @@ We provide multiple VLA model checkpoints with capabilities to deploy on various
 
 | Model        | Use Case    | Description                                                                                                 | Checkpoint Path                                |
 | ------------ | ----------- | ----------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
-| normalizer      | Inference & Fine-Tuning (Freeze) | Normalizer for action normalization   | [umi_normalizer_wo_downsample_indentity_rot.pt](http://ml.cs.tsinghua.edu.cn/~lingxuan/rdt2/umi_normalizer_wo_downsample_indentity_rot.pt)    |
+| normalizer      | Inference & Fine-Tuning (Freeze) | Normalizer for action normalization   | [umi_normalizer_wo_downsample_indentity_rot.pt](https://huggingface.co/robotics-diffusion-transformer/RVQActionTokenizer/blob/main/umi_normalizer_wo_downsample_indentity_rot.pt)    |
 | Residual VQ  | Inference & Fine-Tuning (Freeze) |  Residual VQ (RVQ) as the action tokenizer   | [`robotics-diffusion-transformer/RVQActionTokenizer`](https://huggingface.co/robotics-diffusion-transformer/RVQActionTokenizer)    |
 | RDT2-VQ      | Inference & Fine-Tuning | Auto-regressive VLA with Residual VQ as the action tokenizer   | [`robotics-diffusion-transformer/RDT2-VQ`](https://huggingface.co/robotics-diffusion-transformer/RDT2-VQ)    |
 | RDT2-FM      | Inference & Fine-Tuning | Auto-regressive VLA (RDT2-VQ) with Flow-Matching Action Expert   | [`robotics-diffusion-transformer/RDT2-FM`](https://huggingface.co/robotics-diffusion-transformer/RDT2-FM)    |
