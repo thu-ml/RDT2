@@ -15,21 +15,27 @@
     src="https://img.shields.io/badge/RDT%202-Homepage-4287f5?logo=probot&logoColor=#009BD5"/></a>
   <a href="https://huggingface.co/collections/robotics-diffusion-transformer/rdt-2-68ce9ddbf7dc520a231220d5"><img alt="Hugging Face"
     src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-TSAIL%20RDT-ffc107?color=ffc107&logoColor=white"/></a>
-  <br>
+  <!-- <br> -->
   <a href="https://discord.gg/vsZS3zmf9A"><img alt="Discord"
     src="https://img.shields.io/badge/Discord-RDT-7289da?logo=discord&logoColor=white&color=7289da"/></a>
+  <br>
 <a href="https://rdt-robotics.github.io/rdt2/feishu.html"><img alt="Feishu"
     src="https://img.shields.io/badge/Feishu-RDT-blue?logo=lark&logoColor=white"/></a>
-  <!-- <a href="https://twitter.com/deepseek_ai"><img alt="Twitter Follow"
-    src="https://img.shields.io/badge/Twitter-deepseek_ai-white?logo=x&logoColor=white"/></a> -->
-  <!-- <br> -->
+  <a href="https://x.com/songming_liu/status/1971643908372550108"><img alt="Twitter Follow"
+    src="https://img.shields.io/badge/Twitter-RDT-white?logo=x&logoColor=white"/></a>
+  <!-- <br>
   <a href="LICENSE"><img alt="License"
     src="https://img.shields.io/badge/License-Apache--2.0-f5de53?logo=apache&color=f5de53"/></a>
   <!-- <a href="https://github.com/deepseek-ai/DeepSeek-V3/blob/main/LICENSE-MODEL"><img alt="Model License"
     src="https://img.shields.io/badge/Model_License-Model_Agreement-f5de53?&color=f5de53"/></a> -->
-  <br>
+  <!-- <br> -->
   <!-- <a href="https://arxiv.org/pdf/2412.19437"><b>Blog Link</b>👁️</a>  -->
-  <!-- <a href="https://arxiv.org/pdf/2412.19437"><b>Paper Link</b>📄</a> -->
+  <a href="https://arxiv.org/pdf/2412.19437"><img alt="Paper"
+    src="https://img.shields.io/badge/arXiv-Paper-B31B1B?logo=arxiv"/></a>
+  <!-- <a href="https://github.com/deepseek-ai/DeepSeek-V3/blob/main/LICENSE-MODEL"><img alt="Model License"
+    src="https://img.shields.io/badge/Model_License-Model_Agreement-f5de53?&color=f5de53"/></a> -->
+  <br>
+  <!-- <a href=""><b>Paper Link</b>📄</a> -->
 </div>
 
 ## Table of Contents
@@ -68,6 +74,7 @@ For all models, we provide checkpoints and examples for using them out of the bo
 ## Updates
 
 - [Sept 2025] We released [RDT2-VQ](https://huggingface.co/robotics-diffusion-transformer/RDT2-VQ) \& [RDT2-FM](https://huggingface.co/robotics-diffusion-transformer/RDT2-FM), the sequel of RDT-1B with better open-world generalization and zero-shot deployment on unseen embodiments.
+- [Feb 2026] We released the [arXiv](https://arxiv.org/pdf/2412.19437) paper.
 
 ## Requirements
 
@@ -468,3 +475,20 @@ We will collect common issues and their solutions here. If you encounter an issu
 | Issue                                     | Resolution                                                                                                                                                                                   |
 | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 | 🚧 In progress 🚧 | 🚧 In progress 🚧 |
+
+## Citation
+
+If you find our work helpful, please cite us:
+
+```bibtex
+@misc{liu2026rdt2exploringscalinglimit,
+      title={RDT2: Exploring the Scaling Limit of UMI Data Towards Zero-Shot Cross-Embodiment Generalization}, 
+      author={Songming Liu and Bangguo Li and Kai Ma and Lingxuan Wu and Hengkai Tan and Xiao Ouyang and Hang Su and Jun Zhu},
+      year={2026},
+      eprint={2602.03310},
+      archivePrefix={arXiv},
+      primaryClass={cs.RO},
+      url={https://arxiv.org/abs/2602.03310}, 
+}
+```
+Thank you!
