@@ -30,7 +30,7 @@
     src="https://img.shields.io/badge/Model_License-Model_Agreement-f5de53?&color=f5de53"/></a> -->
   <!-- <br> -->
   <!-- <a href="https://arxiv.org/pdf/2412.19437"><b>Blog Link</b>👁️</a>  -->
-  <a href="https://arxiv.org/pdf/2412.19437"><img alt="Paper"
+  <a href="https://arxiv.org/abs/2602.03310"><img alt="Paper"
     src="https://img.shields.io/badge/arXiv-Paper-B31B1B?logo=arxiv"/></a>
   <!-- <a href="https://github.com/deepseek-ai/DeepSeek-V3/blob/main/LICENSE-MODEL"><img alt="Model License"
     src="https://img.shields.io/badge/Model_License-Model_Agreement-f5de53?&color=f5de53"/></a> -->
@@ -74,7 +74,7 @@ For all models, we provide checkpoints and examples for using them out of the bo
 ## Updates
 
 - [Sept 2025] We released [RDT2-VQ](https://huggingface.co/robotics-diffusion-transformer/RDT2-VQ) \& [RDT2-FM](https://huggingface.co/robotics-diffusion-transformer/RDT2-FM), the sequel of RDT-1B with better open-world generalization and zero-shot deployment on unseen embodiments.
-- [Feb 2026] We released the [arXiv](https://arxiv.org/pdf/2412.19437) paper.
+- [Feb 2026] We released the [arXiv](https://arxiv.org/abs/2602.03310) paper.
 
 ## Requirements
 
