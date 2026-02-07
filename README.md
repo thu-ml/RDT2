@@ -481,14 +481,11 @@ We will collect common issues and their solutions here. If you encounter an issu
 If you find our work helpful, please cite us:
 
 ```bibtex
-@misc{liu2026rdt2exploringscalinglimit,
-      title={RDT2: Exploring the Scaling Limit of UMI Data Towards Zero-Shot Cross-Embodiment Generalization}, 
-      author={Songming Liu and Bangguo Li and Kai Ma and Lingxuan Wu and Hengkai Tan and Xiao Ouyang and Hang Su and Jun Zhu},
-      year={2026},
-      eprint={2602.03310},
-      archivePrefix={arXiv},
-      primaryClass={cs.RO},
-      url={https://arxiv.org/abs/2602.03310}, 
+@article{liu2026rdt2,
+  title={RDT2: Exploring the Scaling Limit of UMI Data Towards Zero-Shot Cross-Embodiment Generalization},
+  author={Liu, Songming and Li, Bangguo and Ma, Kai and Wu, Lingxuan and Tan, Hengkai and Ouyang, Xiao and Su, Hang and Zhu, Jun},
+  journal={arXiv preprint arXiv:2602.03310},
+  year={2026}
 }
 ```
 Thank you!
