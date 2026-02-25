@@ -448,7 +448,7 @@ def train(args, logger):
             accelerator.print(f"Resuming from checkpoint {path}")
             try:
                 accelerator.load_state(os.path.join(args.output_dir, path)) # load_module_strict=False
-            except:
+            except Exception:
                 # load deepspeed's state_dict
                 logger.info("Resuming training state failed. Attempting to only load from model checkpoint.")
                 checkpoint = torch.load(os.path.join(args.output_dir, path, "pytorch_model", "mp_rank_00_model_states.pt"))
