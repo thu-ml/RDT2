@@ -126,6 +126,29 @@ pip install -r requirements/ur5e.txt
 pip install -r requirements/franka_research_3.txt
 ```
 
+### Run on Intel GPU (XPU)
+
+Inference also runs on Intel GPUs (for example Intel Arc Pro B60) through PyTorch's XPU backend. Install a current Intel GPU driver first, as described in [PyTorch's Intel GPU guide](https://docs.pytorch.org/docs/stable/notes/get_start_xpu.html): this was tested with compute runtime 26.40, while with compute runtime 25.44 boolean mask indexing on XPU returned wrong results and the model stopped with an index error in `get_rope_index`. In the same conda environment, install PyTorch for XPU instead of the CUDA build, and the dependencies without the CUDA-only packages (flash-attn, vllm, deepspeed, bitsandbytes):
+
+```bash
+pip install torch torchvision --index-url https://download.pytorch.org/whl/xpu
+pip install -r requirements-xpu.txt
+```
+
+Then run the inference examples below with the XPU device. For RDT2-VQ, load the model with PyTorch SDPA attention instead of FlashAttention-2:
+
+```python
+device = "xpu"
+model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
+    "robotics-diffusion-transformer/RDT2-VQ",
+    torch_dtype=torch.bfloat16,
+    attn_implementation="sdpa",
+    device_map=device
+).eval()
+```
+
+For RDT2-FM, pass `device="xpu"` to `RDTInferencer` (or leave it out: it picks CUDA, then XPU, then CPU, and uses SDPA when FlashAttention-2 is not available). The deployment scripts in `deploy/` pick the device the same way. The vLLM path (`--use_vllm`) and training stay CUDA-only.
+
 ## Model Checkpoints
 
 <!-- ###  Models -->

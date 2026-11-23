@@ -57,6 +57,7 @@ from deploy.umi.real_world.real_inference_util import (
 # from deploy.umi.real_world.spacemouse_shared_memory import Spacemouse
 from data.umi.pose_util import pose_to_mat, mat_to_pose, pose10d_to_mat, mat_to_pose10d
 from models.rdt_inferencer import RDTInferencer
+from utils import get_default_device
 
 OmegaConf.register_new_resolver("eval", eval, replace=True)
 
@@ -201,7 +202,7 @@ def main(
 
             print("Loading model and processor...")
             # Check if models are already cached in memory
-            device = torch.device('cuda')
+            device = get_default_device()
             
             with open(model_config, "r") as f:
                 model_config = yaml.safe_load(f)

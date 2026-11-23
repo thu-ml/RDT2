@@ -1,5 +1,6 @@
 import io
 import random
+import importlib.util
 
 import cv2
 import torch
@@ -7,6 +8,29 @@ import torch.nn.functional as F
 from PIL import Image
 
 from data.umi.pose_util import geodesic_loss, rot6d_to_mat_torch
+
+
+def get_default_device():
+    """
+    Return the default accelerator: CUDA if available, then Intel XPU, then CPU.
+    """
+    if torch.cuda.is_available():
+        return torch.device("cuda")
+    if hasattr(torch, "xpu") and torch.xpu.is_available():
+        return torch.device("xpu")
+    return torch.device("cpu")
+
+
+def get_attn_implementation(device=None):
+    """
+    Return the attention backend for the vision-language model:
+    FlashAttention-2 on CUDA when it is installed, PyTorch SDPA otherwise
+    (for example on Intel XPU or CPU).
+    """
+    device = torch.device(device) if device is not None else get_default_device()
+    if device.type == "cuda" and importlib.util.find_spec("flash_attn") is not None:
+        return "flash_attention_2"
+    return "sdpa"
 
 
 def unbatchfy(batch):
