@@ -82,7 +82,7 @@ class LinearNormalizer(DictOfTensorMixin):
     @classmethod
     def load(cls, filepath: str) -> 'LinearNormalizer':
         normalizer = cls()
-        normalizer.params_dict = torch.load(filepath, weights_only=False)
+        normalizer.params_dict = torch.load(filepath, map_location="cpu", weights_only=False)
         print(f"LinearNormalizer loaded from {filepath}")
         return normalizer
 

@@ -12,6 +12,7 @@ from transformers import Qwen2_5_VLForConditionalGeneration, AutoProcessor
 
 from models.normalizer import LinearNormalizer
 from models.rdt_runner import RDTRunner
+from utils import get_attn_implementation, get_default_device
 # from models.rdt_distill_runner import RDTDistillRunner
 
 class RDTInferencer:
@@ -27,11 +28,13 @@ class RDTInferencer:
         pretrained_vision_encoder_name_or_path: Optional[str] = None,
         pretrained_vision_language_model_name_or_path=None,
         pre_compute_txt_embeddings_dir=None,
-        device='cuda',
+        device=None,
         dtype=torch.bfloat16,
     ):
         print(f"Initializing RDTInferencer with config: {config}.")
 
+        if device is None:
+            device = get_default_device()
         self.config = config
         self.dtype = dtype
         self.device = device
@@ -59,7 +62,7 @@ class RDTInferencer:
                 raise ValueError(f"Pre-compute text embeddings directory {pre_compute_txt_embeddings_dir} does not exist.")
             lang_embed_pt_paths = [os.path.join(pre_compute_txt_embeddings_dir, f) for
                 f in os.listdir(pre_compute_txt_embeddings_dir) if re.fullmatch(r'lang_embed_\d+\.pt', f)]
-            self.precomputed_lang_embeds = [torch.load(pt_path) for pt_path in lang_embed_pt_paths]
+            self.precomputed_lang_embeds = [torch.load(pt_path, map_location="cpu") for pt_path in lang_embed_pt_paths]
 
         self.policy = self.get_policy(pretrained_path)
         self.normalizer = LinearNormalizer.load(normalizer_path)
@@ -116,7 +119,7 @@ class RDTInferencer:
         vision_language_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
             pretrained_vision_language_model_name_or_path,
             torch_dtype=self.dtype,
-            attn_implementation="flash_attention_2",
+            attn_implementation=get_attn_implementation(self.device),
             device_map=self.device,
         )
         processor = AutoProcessor.from_pretrained(

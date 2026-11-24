@@ -35,7 +35,7 @@ from deploy.umi.real_world.real_inference_util import (
 # from deploy.umi.real_world.spacemouse_shared_memory import Spacemouse
 from data.umi.pose_util import pose_to_mat, mat_to_pose, pose10d_to_mat, mat_to_pose10d
 from vqvae.models.multivqvae import MultiVQVAE
-from utils import batch_predict_action
+from utils import batch_predict_action, get_attn_implementation, get_default_device
 
 OmegaConf.register_new_resolver("eval", eval, replace=True)
 
@@ -198,7 +198,7 @@ def main(
 
             print("Loading model and processor...")
             # Check if models are already cached in memory
-            device = torch.device('cuda')
+            device = get_default_device()
             
             # Use a global cache for models to avoid reloading
             # First define the cache directory for transformers models
@@ -239,7 +239,7 @@ def main(
                     main._cached_model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
                         input,
                         torch_dtype=torch.bfloat16,
-                        attn_implementation="flash_attention_2",
+                        attn_implementation=get_attn_implementation(device),
                         device_map=device
                     )
                     main._cached_model_path = input
