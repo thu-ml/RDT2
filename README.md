@@ -128,7 +128,7 @@ pip install -r requirements/franka_research_3.txt
 
 ### Run on Intel GPU (XPU)
 
-Inference also runs on Intel GPUs (for example Intel Arc Pro B60) through PyTorch's XPU backend. Install a current Intel GPU driver first, as described in [PyTorch's Intel GPU guide](https://docs.pytorch.org/docs/stable/notes/get_start_xpu.html): this was tested with compute runtime 26.40, while with compute runtime 25.44 boolean mask indexing on XPU returned wrong results and the model stopped with an index error in `get_rope_index`. In the same conda environment, install PyTorch for XPU instead of the CUDA build, and the dependencies without the CUDA-only packages (flash-attn, vllm, deepspeed, bitsandbytes):
+Inference also runs on Intel GPUs (for example Intel Arc Pro B60) through PyTorch's XPU backend. Install a current Intel GPU driver first, as described in [PyTorch's Intel GPU guide](https://docs.pytorch.org/docs/stable/notes/get_start_xpu.html): this was tested with compute runtime 26.40. In the same conda environment, install PyTorch for XPU instead of the CUDA build, and the dependencies without the CUDA-only packages (flash-attn, vllm, deepspeed, bitsandbytes):
 
 ```bash
 pip install torch torchvision --index-url https://download.pytorch.org/whl/xpu
